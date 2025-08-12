@@ -1,0 +1,106 @@
+//
+// Project: TGDP - Traffic Generator for Diameter Protocol
+// Description: Simple tool for testing and debugging the Diameter protocol
+//
+// Author: Alexander Kefeli <alexander.kefeli@gmail.com>
+//
+// File: Diameter.pkl
+// Description: 3GPP Diameter abstractions
+//
+
+@go.Package { name = "/diameter" }
+
+module Diameter
+
+import "package://pkg.pkl-lang.org/pkl-go/pkl.golang@0.11.1#/go.pkl"
+
+class App {
+  id:     UInt32
+  name:   String
+  vnd:    String
+  vnd_id: UInt32
+  cmds:   Listing<Cmd>
+}
+
+class Cmd {
+  code:    UInt32
+  name:    String
+  short:   String
+  flags:   UInt8 = 0
+  request: Listing<AvpRule>
+  answer:  Listing<AvpRule>
+}
+
+class CmdBitFlags {
+  R: UInt8 = 128 // Request
+  P: UInt8 = 64  // Proxy
+  E: UInt8 = 32  // Error
+  T: UInt8 = 16  // ReTransmition
+}
+
+class AvpRule {
+  name:     String
+  required: Boolean
+  max:      Int = 0
+}
+
+class Avp {
+  code:     UInt32
+  name:     String
+  flags:    UInt8 = 0
+  vnd_id:   UInt32 = 0
+  length:   UInt32 = 0
+  type:     Int
+  enum:     Enum?
+  group:    Group?
+  data:     AvpData?
+}
+
+class Enum {
+  items: Listing<Item>
+}
+
+class Item {
+  code: Int32
+  name: String
+}
+
+class Group {
+  members: Listing<AvpRule>
+}
+
+class AvpData {
+  Value: Any
+  Size: UInt32
+}
+
+class AvpBitFlags {
+  V: UInt8 = 128 // Vendor specific
+  M: UInt8 = 64  // Mandatory
+  P: UInt8 = 32  // Protected
+}
+
+class AvpDataTypes {
+  OctetString:   Int = 1
+  Integer32:     Int = 2
+  Integer64:     Int = 3
+  Unsigned32:    Int = 4
+  Unsigned64:    Int = 5
+  Float32:       Int = 6
+  Float64:       Int = 7
+  Address:       Int = 8
+  Time:          Int = 9
+  UTF8String:    Int = 10
+  Identity:      Int = 11
+  URI:           Int = 12
+  IPFilterRule:  Int = 13
+  QoSFilterRule: Int = 14
+  Enumerated:    Int = 15
+  Grouped:       Int = 16
+}
+
+Apps: Listing<App>
+Avps: Listing<Avp>
+CmdFlags: CmdBitFlags
+AvpFlags: AvpBitFlags
+AvpTypes: AvpDataTypes

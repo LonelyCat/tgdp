@@ -1,0 +1,21 @@
+//
+// Project: TGDP - Traffic Generator for Diameter Protocol
+// Description: Simple tool for testing and debugging the Diameter protocol
+//
+// Author: Alexander Kefeli <alexander.kefeli@gmail.com>
+//
+// File: Diameter.pkl
+// Description: 3GPP Diameter dictionary implementation
+//
+
+module dictionary
+
+import "Diameter.pkl"
+import "apps.pkl"
+import "avps.pkl"
+
+Apps = apps.Apps
+Avps = avps.Avps
+CmdFlags = new Diameter.CmdBitFlags{}
+AvpFlags = new Diameter.AvpBitFlags{}
+AvpTypes = new Diameter.AvpDataTypes{}

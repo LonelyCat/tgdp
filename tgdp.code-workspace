@@ -1,0 +1,36 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"go.buildFlags": [
+			"-buildvcs=false"
+		],
+		"makefile.configureOnOpen": false
+	},
+	"launch": {
+		"version": "0.2.0",
+		"configurations": [
+			{
+				"name": "Go Launch Process",
+				"type": "go",
+				"request": "launch",
+				"mode": "debug",
+				"cwd": "${workspaceFolder}",
+	 			"program": "${workspaceFolder}/cmd/tgdp",
+				"args": [ "-c", "${workspaceFolder}/configs" ]
+			},
+			{
+				"name": "Attach to Go Process",
+				"type": "go",
+				"request": "attach",
+				"mode": "remote",
+				"remotePath": "",
+				"port": 2345,
+				"host": "127.0.0.1",
+			}
+		]
+	}
+}

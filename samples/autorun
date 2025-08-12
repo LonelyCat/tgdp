@@ -1,0 +1,5 @@
+echo Welcome to TGDP !
+echo
+
+verbose 3
+# connect dra
