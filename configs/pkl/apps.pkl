@@ -1,0 +1,837 @@
+//
+// Project: TGDP - Traffic Generator for Diameter Protocol
+// Description: Simple tool for testing and debugging the Diameter protocol
+//
+// Author: Alexander Kefeli <alexander.kefeli@gmail.com>
+//
+// File: apps.pkl
+// Description: 3GPP Diameter applications definitions
+//
+
+module apps
+
+import "Diameter.pkl"
+
+//
+// Just simplify to improve readability
+// Do not edit >>>
+//
+local typealias App     = Diameter.App
+local typealias Command = Diameter.Cmd
+local typealias AvpRule = Diameter.AvpRule
+hidden R = Diameter.CmdFlags.R
+hidden P = Diameter.CmdFlags.P
+hidden E = Diameter.CmdFlags.E
+hidden T = Diameter.CmdFlags.T
+//
+// <<< Do not edit
+
+//
+// Applications
+//
+Apps = new Listing {
+  new App {
+    id = 0
+    name = "Common Messages"
+    vnd = "IETF"
+    vnd_id = 0
+    cmds = new Listing {
+      // Capabilities Exchange Request/Answer
+      new Command { code=257 name="Capabilities Exchange" short="CE"
+        request = new Listing {
+          new AvpRule { name="Origin-Host" required=true max=1 }
+          new AvpRule { name="Origin-Realm" required=true max=1 }
+          new AvpRule { name="Host-IP-Address" required=true }
+          new AvpRule { name="Vendor-Id" required=true max=1 }
+          new AvpRule { name="Product-Name" required=true max=1 }
+          new AvpRule { name="Origin-State-Id" required=true max=1 }
+          new AvpRule { name="Supported-Vendor-Id" required=false max=1 }
+          new AvpRule { name="Auth-Application-Id" required=false }
+          new AvpRule { name="Acct-Application-Id" required=false }
+          new AvpRule { name="Vendor-Specific-Application-Id" required=false max=1 }
+          new AvpRule { name="Firmware-Revision" required=false max=1 }
+          new AvpRule { name="Inband-Security-Id" required=false max=1 }
+        }
+        answer = new Listing {
+          new AvpRule { name="Result-Code" required=true max=1 }
+          new AvpRule { name="Origin-Host" required=true max=1 }
+          new AvpRule { name="Origin-Realm" required=true max=1 }
+          new AvpRule { name="Host-IP-Address" required=true }
+          new AvpRule { name="Vendor-Id" required=true max=1 }
+          new AvpRule { name="Product-Name" required=true max=1 }
+          new AvpRule { name="Origin-State-Id" required=false max=1 }
+          new AvpRule { name="Error-Message" required=false max=1 }
+          new AvpRule { name="Failed-AVP" required=false max=1 }
+          new AvpRule { name="Supported-Vendor-Id" required=false max=1 }
+          new AvpRule { name="Auth-Application-Id" required=false }
+          new AvpRule { name="Acct-Application-Id" required=false }
+          new AvpRule { name="Vendor-Specific-Application-Id" required=false max=1 }
+          new AvpRule { name="Firmware-Revision" required=false max=1 }
+          new AvpRule { name="Inband-Security-Id" required=false max=1 }
+        }
+      }
+
+      // Device Watchdog Request/Answer
+      new Command { code=280 name="Device Watchdog" short="DW"
+        request = new Listing {
+          new AvpRule { name="Origin-Host" required=true max=1 }
+          new AvpRule { name="Origin-Realm" required=true max=1 }
+          new AvpRule { name="Origin-State-Id" required=true max=1 }
+        }
+        answer = new Listing {
+          new AvpRule { name="Result-Code" required=true max=1 }
+          new AvpRule { name="Origin-Host" required=true max=1 }
+          new AvpRule { name="Origin-Realm" required=true max=1 }
+          new AvpRule { name="Origin-State-Id" required=true max=1 }
+        }
+      }
+
+      // Disconnect Peer Request/Answer
+      new Command { code=282 name="Disconnect Peer" short="DP"
+        request = new Listing {
+          new AvpRule { name="Origin-Host" required=true max=1 }
+          new AvpRule { name="Origin-Realm" required=true max=1 }
+          new AvpRule { name="Disconnect-Cause" required=true max=1 }
+        }
+        answer = new Listing {
+          new AvpRule { name="Result-Code" required=true max=1 }
+          new AvpRule { name="Origin-Host" required=true max=1 }
+          new AvpRule { name="Origin-Realm" required=true max=1 }
+          new AvpRule { name="Error-Message" required=false max=1 }
+          new AvpRule { name="Failed-AVP" required=false max=1 }
+        }
+      }
+    }
+  }
+
+  new App {
+    id = 16777251
+    name = "S6a"
+    vnd = "3GPP"
+    vnd_id = 10415
+    cmds = new Listing {
+      // Update Location Request/Answer
+      new Command { code=316 name="Update Location" short="UL" flags=P
+        request = new Listing {
+          new AvpRule { name="Session-Id" required=true max=1 }
+          new AvpRule { name="DRMP" required=false max=1 }
+          new AvpRule { name="Vendor-Specific-Application-Id" required=true max=1 }
+          new AvpRule { name="Auth-Session-State" required=true max=1 }
+          new AvpRule { name="Origin-Host" required=true max=1 }
+          new AvpRule { name="Origin-Realm" required=true max=1 }
+          new AvpRule { name="Destination-Host" required=true max=1 }
+          new AvpRule { name="Destination-Realm" required=true max=1 }
+          new AvpRule { name="User-Name" required=true max=1 }
+          new AvpRule { name="Supported-Features" required=false }
+          new AvpRule { name="Terminal-Information" required=false max=1 }
+          new AvpRule { name="RAT-Type" required=true max=1 }
+          new AvpRule { name="ULR-Flags" required=true max=1 }
+          new AvpRule { name="UE-SRVCC-Capability" required=false max=1 }
+          new AvpRule { name="Visited-PLMN-Id" required=true max=1 }
+          new AvpRule { name="SGSN-Number" required=false max=1 }
+          new AvpRule { name="Homogeneous-Support-of-IMS-Voice-Over-PS-Sessions" required=false max=1 }
+          new AvpRule { name="GMLC-Address" required=false max=1 }
+          new AvpRule { name="Active-APN" required=false }
+          new AvpRule { name="Equivalent-PLMN-List" required=false }
+          new AvpRule { name="MME-Number-for-MT-SMS" required=false max=1 }
+          new AvpRule { name="SMS-Register-Request" required=false max=1 }
+          new AvpRule { name="SGs-MME-Identity" required=false max=1 }
+          new AvpRule { name="Coupled-Node-Diameter-ID" required=false max=1 }
+          new AvpRule { name="Adjacent-PLMNs" required=false }
+          new AvpRule { name="Supported-Services" required=false }
+          new AvpRule { name="Proxy-Info" required=false }
+          new AvpRule { name="Route-Record" required=false }
+        }
+        answer = new Listing {
+          new AvpRule { name="Session-Id" required=true max=1 }
+          new AvpRule { name="DRMP" required=false max=1 }
+          new AvpRule { name="Vendor-Specific-Application-Id" required=false max=1 }
+          new AvpRule { name="Result-Code" required=false max=1 }
+          new AvpRule { name="Experimental-Result" required=false max=1 }
+          new AvpRule { name="Error-Diagnostic" required=false max=1 }
+          new AvpRule { name="Auth-Session-State" required=true max=1 }
+          new AvpRule { name="Origin-Host" required=true max=1 }
+          new AvpRule { name="Origin-Realm" required=true max=1 }
+          new AvpRule { name="Supported-Features" required=false }
+          new AvpRule { name="ULA-Flags" required=false max=1 }
+          new AvpRule { name="Subscription-Data" required=false max=1 }
+          new AvpRule { name="Failed-AVP" required=false max=1 }
+          new AvpRule { name="Proxy-Info" required=false }
+          new AvpRule { name="Route-Record" required=false }
+        }
+      }
+
+      // Cancel Location Request/Answer
+      new Command { code=317 name="Cancel Location" short="CL" flags=P
+        request = new Listing {
+          new AvpRule { name="Session-Id" required=true max=1 }
+          new AvpRule { name="DRMP" required=false max=1 }
+          new AvpRule { name="Vendor-Specific-Application-Id" required=true max=1 }
+          new AvpRule { name="Auth-Session-State" required=true max=1 }
+          new AvpRule { name="Origin-Host" required=true max=1 }
+          new AvpRule { name="Origin-Realm" required=true max=1 }
+          new AvpRule { name="Destination-Host" required=true max=1 }
+          new AvpRule { name="Destination-Realm" required=true max=1 }
+          new AvpRule { name="User-Name" required=true max=1 }
+          new AvpRule { name="Supported-Features" required=false }
+          new AvpRule { name="Cancellation-Type" required=true }
+          new AvpRule { name="CLR-Flags" required=false }
+          new AvpRule { name="Proxy-Info" required=false }
+          new AvpRule { name="Route-Record" required=false }
+        }
+        answer = new Listing {
+          new AvpRule { name="Session-Id" required=true max=1 }
+          new AvpRule { name="DRMP" required=false max=1 }
+          new AvpRule { name="Vendor-Specific-Application-Id" required=false max=1 }
+          new AvpRule { name="Supported-Features" required=false }
+          new AvpRule { name="Result-Code" required=false max=1 }
+          new AvpRule { name="Experimental-Result" required=false max=1 }
+          new AvpRule { name="Auth-Session-State" required=true max=1 }
+          new AvpRule { name="Origin-Host" required=true max=1 }
+          new AvpRule { name="Origin-Realm" required=true max=1 }
+          new AvpRule { name="Subscription-Data" required=false max=1 }
+          new AvpRule { name="Failed-AVP" required=false max=1 }
+          new AvpRule { name="Proxy-Info" required=false }
+          new AvpRule { name="Route-Record" required=false }
+        }
+      }
+
+      // Authentication Information Request/Answer
+      new Command { code=318 name="Authentication-Information" short="AI" flags=P
+        request = new Listing {
+          new AvpRule { name="Session-Id" required=true max=1 }
+          new AvpRule { name="DRMP" required=false max=1 }
+          new AvpRule { name="Vendor-Specific-Application-Id" required=true max=1 }
+          new AvpRule { name="Auth-Session-State" required=true max=1 }
+          new AvpRule { name="Origin-Host" required=true max=1 }
+          new AvpRule { name="Origin-Realm" required=true max=1 }
+          new AvpRule { name="Destination-Host" required=true max=1 }
+          new AvpRule { name="Destination-Realm" required=true max=1 }
+          new AvpRule { name="User-Name" required=true max=1 }
+          new AvpRule { name="OC-Supported-Features" required=false max=1 }
+          new AvpRule { name="Supported-Features" required=false }
+          new AvpRule { name="Requested-EUTRAN-Authentication-Info" required=false }
+          new AvpRule { name="Requested-UTRAN-GERAN-Authentication-Info" required=false max=1 }
+          new AvpRule { name="Visited-PLMN-Id" required=true max=1 }
+          new AvpRule { name="AIR-Flags" required=false max=1 }
+          new AvpRule { name="Proxy-Info" required=false }
+          new AvpRule { name="Route-Record" required=false }
+        }
+        answer = new Listing {
+          new AvpRule { name="Session-Id" required=true max=1 }
+          new AvpRule { name="DRMP" required=false max=1 }
+          new AvpRule { name="Vendor-Specific-Application-Id" required=false max=1 }
+          new AvpRule { name="Result-Code" required=false max=1 }
+          new AvpRule { name="Experimental-Result" required=false max=1 }
+          new AvpRule { name="Error-Diagnostic" required=false max=1 }
+          new AvpRule { name="Auth-Session-State" required=true max=1 }
+          new AvpRule { name="Origin-Host" required=true max=1 }
+          new AvpRule { name="Origin-Realm" required=true max=1 }
+          new AvpRule { name="OC-Supported-Features" required=false max=1 }
+          new AvpRule { name="OC-OLR" required=false max=1 }
+          new AvpRule { name="Supported-Features" required=false }
+          new AvpRule { name="Authentication-Info" required=false max=1 }
+          new AvpRule { name="Failed-AVP" required=false max=1 }
+          new AvpRule { name="Proxy-Info" required=false }
+          new AvpRule { name="Route-Record" required=false }
+        }
+      }
+
+      // Insert Subscriber Data Request/Answer
+      new Command { code=319 name="Insert Subscriber Data" short="ID" flags=P
+        request = new Listing {
+          new AvpRule { name="Session-Id" required=true max=1 }
+          new AvpRule { name="DRMP" required=false max=1 }
+          new AvpRule { name="Vendor-Specific-Application-Id" required=true max=1 }
+          new AvpRule { name="Auth-Session-State" required=true max=1 }
+          new AvpRule { name="Origin-Host" required=true max=1 }
+          new AvpRule { name="Origin-Realm" required=true max=1 }
+          new AvpRule { name="Destination-Host" required=true max=1 }
+          new AvpRule { name="Destination-Realm" required=true max=1 }
+          new AvpRule { name="User-Name" required=true max=1 }
+          new AvpRule { name="Supported-Features" required=false }
+          new AvpRule { name="Subscription-Data" required=true max=1 }
+          new AvpRule { name="IDR-Flags" required=false max=1 }
+          new AvpRule { name="Proxy-Info" required=false }
+          new AvpRule { name="Route-Record" required=false }
+        }
+        answer = new Listing {
+          new AvpRule { name="Session-Id" required=true max=1 }
+          new AvpRule { name="DRMP" required=false max=1 }
+          new AvpRule { name="Vendor-Specific-Application-Id" required=false max=1 }
+          new AvpRule { name="Supported-Features" required=false }
+          new AvpRule { name="Result-Code" required=false max=1 }
+          new AvpRule { name="Experimental-Result" required=false max=1 }
+          new AvpRule { name="Auth-Session-State" required=true max=1 }
+          new AvpRule { name="Origin-Host" required=true max=1 }
+          new AvpRule { name="Origin-Realm" required=true max=1 }
+          new AvpRule { name="IMS-Voice-Over-PS-Sessions-Supported" required=false max=1 }
+          new AvpRule { name="Last-UE-Activity-Time" required=false max=1 }
+          new AvpRule { name="RAT-Type" required=false max=1 }
+          new AvpRule { name="IDA-Flags" required=false max=1 }
+          new AvpRule { name="EPS-User-State" required=false max=1 }
+          new AvpRule { name="EPS-Location-Information" required=false max=1 }
+          new AvpRule { name="Local-Time-Zone" required=false max=1 }
+          new AvpRule { name="Supported-Services" required=false }
+          new AvpRule { name="Failed-AVP" required=false max=1 }
+          new AvpRule { name="Proxy-Info" required=false }
+          new AvpRule { name="Route-Record" required=false }
+        }
+      }
+
+      // Delete Subscriber Data Request/Answer
+      new Command { code=320 name="Delete Subscriber Data" short="DD" flags=P
+        request = new Listing {
+          new AvpRule { name="Session-Id" required=true max=1 }
+          new AvpRule { name="DRMP" required=false max=1 }
+          new AvpRule { name="Vendor-Specific-Application-Id" required=true max=1 }
+          new AvpRule { name="Auth-Session-State" required=true max=1 }
+          new AvpRule { name="Origin-Host" required=true max=1 }
+          new AvpRule { name="Origin-Realm" required=true max=1 }
+          new AvpRule { name="Destination-Host" required=true max=1 }
+          new AvpRule { name="Destination-Realm" required=true max=1 }
+          new AvpRule { name="User-Name" required=true max=1 }
+          new AvpRule { name="Supported-Features" required=false }
+          new AvpRule { name="DSR-Flags" required=true max=1 }
+          new AvpRule { name="SCEF-ID" required=false max=1 }
+          new AvpRule { name="Context-Identifier" required=false }
+          new AvpRule { name="Trace-Reference" required=false max=1 }
+          new AvpRule { name="TS-Code" required=false }
+          new AvpRule { name="SS-Code" required=false }
+          new AvpRule { name="Proxy-Info" required=false }
+          new AvpRule { name="Route-Record" required=false }
+        }
+        answer = new Listing {
+          new AvpRule { name="Session-Id" required=true max=1 }
+          new AvpRule { name="DRMP" required=false max=1 }
+          new AvpRule { name="Vendor-Specific-Application-Id" required=false max=1 }
+          new AvpRule { name="Supported-Features" required=false }
+          new AvpRule { name="Result-Code" required=false max=1 }
+          new AvpRule { name="Experimental-Result" required=false max=1 }
+          new AvpRule { name="Auth-Session-State" required=true max=1 }
+          new AvpRule { name="Origin-Host" required=true max=1 }
+          new AvpRule { name="Origin-Realm" required=true max=1 }
+          new AvpRule { name="DSA-Flags" required=false max=1 }
+          new AvpRule { name="Failed-AVP" required=false max=1 }
+          new AvpRule { name="Proxy-Info" required=false }
+          new AvpRule { name="Route-Record" required=false }
+        }
+      }
+
+      // Purge UE Request/Answer
+      new Command { code=321 name="Purge UE" short="PU" flags=P
+        request = new Listing {
+          new AvpRule { name="Session-Id" required=true max=1 }
+          new AvpRule { name="DRMP" required=false max=1 }
+          new AvpRule { name="Vendor-Specific-Application-Id" required=true max=1 }
+          new AvpRule { name="Auth-Session-State" required=true max=1 }
+          new AvpRule { name="Origin-Host" required=true max=1 }
+          new AvpRule { name="Origin-Realm" required=true max=1 }
+          new AvpRule { name="Destination-Host" required=true max=1 }
+          new AvpRule { name="Destination-Realm" required=true max=1 }
+          new AvpRule { name="User-Name" required=true max=1 }
+          new AvpRule { name="Supported-Features" required=false }
+          new AvpRule { name="PUR-Flags" required=false max=1 }
+          new AvpRule { name="EPS-Location-Information" required=false max=1 }
+          new AvpRule { name="Proxy-Info" required=false }
+          new AvpRule { name="Route-Record" required=false }
+        }
+        answer = new Listing {
+          new AvpRule { name="Session-Id" required=true max=1 }
+          new AvpRule { name="DRMP" required=false max=1 }
+          new AvpRule { name="Vendor-Specific-Application-Id" required=false max=1 }
+          new AvpRule { name="Supported-Features" required=false }
+          new AvpRule { name="Result-Code" required=false max=1 }
+          new AvpRule { name="Experimental-Result" required=false max=1 }
+          new AvpRule { name="Auth-Session-State" required=true max=1 }
+          new AvpRule { name="Origin-Host" required=true max=1 }
+          new AvpRule { name="Origin-Realm" required=true max=1 }
+          new AvpRule { name="PUA-Flags" required=false max=1 }
+          new AvpRule { name="Failed-AVP" required=false max=1 }
+          new AvpRule { name="Proxy-Info" required=false }
+          new AvpRule { name="Route-Record" required=false }
+        }
+      }
+
+      // Reset Request/Answer
+      new Command { code=322 name="Reset" short="RE" flags=P
+        request = new Listing {
+          new AvpRule { name="Session-Id" required=true max=1 }
+          new AvpRule { name="DRMP" required=false max=1 }
+          new AvpRule { name="Vendor-Specific-Application-Id" required=true max=1 }
+          new AvpRule { name="Auth-Session-State" required=true max=1 }
+          new AvpRule { name="Origin-Host" required=true max=1 }
+          new AvpRule { name="Origin-Realm" required=true max=1 }
+          new AvpRule { name="Destination-Host" required=true max=1 }
+          new AvpRule { name="Destination-Realm" required=true max=1 }
+          new AvpRule { name="Supported-Features" required=false }
+          new AvpRule { name="User-Id" required=false }
+          new AvpRule { name="Reset-ID" required=false }
+          new AvpRule { name="Subscription-Data" required=false max=1 }
+          new AvpRule { name="Subscription-Data-Deletion" required=false max=1 }
+          new AvpRule { name="Proxy-Info" required=false }
+          new AvpRule { name="Route-Record" required=false }
+        }
+        answer = new Listing {
+          new AvpRule { name="Session-Id" required=true max=1 }
+          new AvpRule { name="DRMP" required=false max=1 }
+          new AvpRule { name="Vendor-Specific-Application-Id" required=false max=1 }
+          new AvpRule { name="Supported-Features" required=false }
+          new AvpRule { name="Result-Code" required=false max=1 }
+          new AvpRule { name="Experimental-Result" required=false max=1 }
+          new AvpRule { name="Auth-Session-State" required=true max=1 }
+          new AvpRule { name="Origin-Host" required=true max=1 }
+          new AvpRule { name="Origin-Realm" required=true max=1 }
+          new AvpRule { name="Failed-AVP" required=false max=1 }
+          new AvpRule { name="Proxy-Info" required=false }
+          new AvpRule { name="Route-Record" required=false }
+        }
+      }
+
+      // Notify Request/Answer
+      new Command { code=323 name="Notify" short="NO" flags=P
+        request = new Listing {
+          new AvpRule { name="Session-Id" required=true max=1 }
+          new AvpRule { name="DRMP" required=false max=1 }
+          new AvpRule { name="Vendor-Specific-Application-Id" required=true max=1 }
+          new AvpRule { name="Auth-Session-State" required=true max=1 }
+          new AvpRule { name="Origin-Host" required=true max=1 }
+          new AvpRule { name="Origin-Realm" required=true max=1 }
+          new AvpRule { name="Destination-Host" required=true max=1 }
+          new AvpRule { name="Destination-Realm" required=true max=1 }
+          new AvpRule { name="User-Name" required=true max=1 }
+          new AvpRule { name="Supported-Features" required=false }
+          new AvpRule { name="NOR-Flags" required=true max=1 }
+          new AvpRule { name="User-Id" required=false max=1 }
+          new AvpRule { name="Equipment-Status" required=false max=1 }
+          new AvpRule { name="Terminal-Information" required=false max=1 }
+          new AvpRule { name="MIP6-Agent-Info" required=false max=1 }
+          new AvpRule { name="Visited-Network-Identifier" required=false max=1 }
+          new AvpRule { name="Context-Identifier" required=false max=1 }
+          new AvpRule { name="Service-Selection" required=false max=1 }
+          new AvpRule { name="Alert-Reason" required=false max=1 }
+          new AvpRule { name="UE-SRVCC-Capability" required=false max=1 }
+          new AvpRule { name="NOR-Info" required=false }
+          new AvpRule { name="Homogeneous-Support-of-IMS-Voice-Over-PS-Sessions" required=false max=1 }
+          new AvpRule { name="Maximum-UE-Availability-Time" required=false max=1 }
+          new AvpRule { name="Proxy-Info" required=false }
+          new AvpRule { name="Route-Record" required=false }
+        }
+        answer = new Listing {
+          new AvpRule { name="Session-Id" required=true max=1 }
+          new AvpRule { name="DRMP" required=false max=1 }
+          new AvpRule { name="Vendor-Specific-Application-Id" required=false max=1 }
+          new AvpRule { name="Supported-Features" required=false }
+          new AvpRule { name="Result-Code" required=false max=1 }
+          new AvpRule { name="Experimental-Result" required=false max=1 }
+          new AvpRule { name="Auth-Session-State" required=true max=1 }
+          new AvpRule { name="Origin-Host" required=true max=1 }
+          new AvpRule { name="Origin-Realm" required=true max=1 }
+          new AvpRule { name="Failed-AVP" required=false max=1 }
+          new AvpRule { name="Proxy-Info" required=false }
+          new AvpRule { name="Route-Record" required=false }
+        }
+      }
+    }
+  }
+
+  new App {
+    id = 16777217
+    name = "Sh"
+    vnd = "3GPP"
+    vnd_id = 10415
+    cmds = new Listing {
+      // User-Data Request/Answer
+      new Command { code=306 name="User-Data" short="UD" flags=P
+        request = new Listing {
+          new AvpRule { name="Session-Id" required=true max=1 }
+          new AvpRule { name="Vendor-Specific-Application-Id" required=true max=1 }
+          new AvpRule { name="Auth-Session-State" required=true max=1 }
+          new AvpRule { name="Origin-Host" required=true max=1 }
+          new AvpRule { name="Origin-Realm" required=true max=1 }
+          new AvpRule { name="Destination-Host" required=false max=1 }
+          new AvpRule { name="Destination-Realm" required=true max=1 }
+          new AvpRule { name="User-Identity" required=true max=1 }
+          new AvpRule { name="Service-Indication" required=false }
+          new AvpRule { name="Data-Reference" required=true }
+          new AvpRule { name="Identity-Set" required=false }
+          new AvpRule { name="Requested-Domain" required=false max=1 }
+          new AvpRule { name="Current-Location" required=false max=1 }
+          new AvpRule { name="DSAI-Tag" required=false }
+          new AvpRule { name="Session-Priority" required=false max=1 }
+          new AvpRule { name="User-Name" required=false max=1 }
+          new AvpRule { name="Requested-Nodes" required=false max=1 }
+          new AvpRule { name="Serving-Node-Indication" required=false max=1 }
+          new AvpRule { name="Pre-paging-Supported" required=false max=1 }
+          new AvpRule { name="Local-Time-Zone-Indication" required=false max=1 }
+          new AvpRule { name="UDR-Flags" required=false max=1 }
+          new AvpRule { name="Call-Reference-Info" required=false }
+          new AvpRule { name="Proxy-Info" required=false }
+          new AvpRule { name="Route-Record" required=false }
+        }
+        answer = new Listing {
+          new AvpRule { name="Session-Id" required=true max=1 }
+          new AvpRule { name="Vendor-Specific-Application-Id" required=true max=1 }
+          new AvpRule { name="Result-Code" required=true max=1 }
+          new AvpRule { name="Experimental-Result" required=false max=1 }
+          new AvpRule { name="Auth-Session-State" required=true max=1 }
+          new AvpRule { name="Origin-Host" required=true max=1 }
+          new AvpRule { name="Origin-Realm" required=true max=1 }
+          new AvpRule { name="User-Data" required=false max=1 }
+          new AvpRule { name="Wildcarded-IMPU" required=false max=1 }
+          new AvpRule { name="Wildcarded-Public-Identity" required=false max=1 }
+          new AvpRule { name="Failed-AVP" required=false max=1 }
+          new AvpRule { name="Proxy-Info" required=false }
+          new AvpRule { name="Route-Record" required=false }
+        }
+      }
+      // Profile-Update Request/Answer
+      new Command { code=307 name="Profile-Update" short="PU" flags=P
+        request = new Listing {
+          new AvpRule { name="Session-Id" required=true max=1 }
+          new AvpRule { name="Vendor-Specific-Application-Id" required=true max=1 }
+          new AvpRule { name="Auth-Session-State" required=true max=1 }
+          new AvpRule { name="Origin-Host" required=true max=1 }
+          new AvpRule { name="Origin-Realm" required=true max=1 }
+          new AvpRule { name="Destination-Host" required=false max=1 }
+          new AvpRule { name="Destination-Realm" required=true max=1 }
+          new AvpRule { name="User-Identity" required=true max=1 }
+          new AvpRule { name="Data-Reference" required=true max=1 }
+          new AvpRule { name="User-Data" required=true max=1 }
+          new AvpRule { name="PUR-Flags" required=false max=1 }
+          new AvpRule { name="Proxy-Info" required=false }
+          new AvpRule { name="Route-Record" required=false }
+        }
+        answer = new Listing {
+          new AvpRule { name="Session-Id" required=true max=1 }
+          new AvpRule { name="Vendor-Specific-Application-Id" required=true max=1 }
+          new AvpRule { name="Result-Code" required=true max=1 }
+          new AvpRule { name="Experimental-Result" required=false max=1 }
+          new AvpRule { name="Auth-Session-State" required=true max=1 }
+          new AvpRule { name="Origin-Host" required=true max=1 }
+          new AvpRule { name="Origin-Realm" required=true max=1 }
+          new AvpRule { name="Failed-AVP" required=false max=1 }
+          new AvpRule { name="Proxy-Info" required=false }
+          new AvpRule { name="Route-Record" required=false }
+        }
+      }
+      // Subscribe-Notifications Request/Answer
+      new Command { code=308 name="Subscribe-Notifications" short="SN" flags=P
+        request = new Listing {
+          new AvpRule { name="Session-Id" required=true max=1 }
+          new AvpRule { name="Vendor-Specific-Application-Id" required=true max=1 }
+          new AvpRule { name="Auth-Session-State" required=true max=1 }
+          new AvpRule { name="Origin-Host" required=true max=1 }
+          new AvpRule { name="Origin-Realm" required=true max=1 }
+          new AvpRule { name="Destination-Host" required=false max=1 }
+          new AvpRule { name="Destination-Realm" required=true max=1 }
+          new AvpRule { name="User-Identity" required=true max=1 }
+          new AvpRule { name="Service-Indication" required=false }
+          new AvpRule { name="Data-Reference" required=true }
+          new AvpRule { name="Subs-Req-Type" required=true max=1 }
+          new AvpRule { name="Send-Data-Indication" required=false max=1 }
+          new AvpRule { name="Server-Name" required=false max=1 }
+          new AvpRule { name="One-Time-Notification" required=false max=1 }
+          new AvpRule { name="Supported-Features" required=false }
+          new AvpRule { name="Proxy-Info" required=false }
+          new AvpRule { name="Route-Record" required=false }
+        }
+        answer = new Listing {
+          new AvpRule { name="Session-Id" required=true max=1 }
+          new AvpRule { name="Vendor-Specific-Application-Id" required=true max=1 }
+          new AvpRule { name="Result-Code" required=true max=1 }
+          new AvpRule { name="Experimental-Result" required=false max=1 }
+          new AvpRule { name="Auth-Session-State" required=true max=1 }
+          new AvpRule { name="Origin-Host" required=true max=1 }
+          new AvpRule { name="Origin-Realm" required=true max=1 }
+          new AvpRule { name="User-Data" required=false max=1 }
+          new AvpRule { name="Expiry-Time" required=false max=1 }
+          new AvpRule { name="Failed-AVP" required=false max=1 }
+          new AvpRule { name="Supported-Features" required=false }
+          new AvpRule { name="Proxy-Info" required=false }
+          new AvpRule { name="Route-Record" required=false }
+        }
+      }
+      // Push-Notification Request/Answer
+      new Command { code=309 name="Push-Notification" short="PN" flags=P
+        request = new Listing {
+          new AvpRule { name="Session-Id" required=true max=1 }
+          new AvpRule { name="Vendor-Specific-Application-Id" required=true max=1 }
+          new AvpRule { name="Auth-Session-State" required=true max=1 }
+          new AvpRule { name="Origin-Host" required=true max=1 }
+          new AvpRule { name="Origin-Realm" required=true max=1 }
+          new AvpRule { name="Destination-Host" required=true max=1 }
+          new AvpRule { name="Destination-Realm" required=true max=1 }
+          new AvpRule { name="User-Identity" required=true max=1 }
+          new AvpRule { name="User-Data" required=true max=1 }
+          new AvpRule { name="User-Data-Already-Available" required=false max=1 }
+          new AvpRule { name="Proxy-Info" required=false }
+          new AvpRule { name="Route-Record" required=false }
+        }
+        answer = new Listing {
+          new AvpRule { name="Session-Id" required=true max=1 }
+          new AvpRule { name="Vendor-Specific-Application-Id" required=true max=1 }
+          new AvpRule { name="Result-Code" required=true max=1 }
+          new AvpRule { name="Experimental-Result" required=false max=1 }
+          new AvpRule { name="Auth-Session-State" required=true max=1 }
+          new AvpRule { name="Origin-Host" required=true max=1 }
+          new AvpRule { name="Origin-Realm" required=true max=1 }
+          new AvpRule { name="Failed-AVP" required=false max=1 }
+          new AvpRule { name="Proxy-Info" required=false }
+          new AvpRule { name="Route-Record" required=false }
+        }
+      }
+    }
+  }
+
+  new App {
+    id = 16777312
+    name = "S6c"
+    vnd = "3GPP"
+    vnd_id = 10415
+    cmds = new Listing {
+      // Send-Routing-Info-for-SM Request/Answer
+      new Command { code=8388647 name="Send-Routing-Info-for-SM" short="SR" flags=P
+        request = new Listing {
+          new AvpRule { name="Session-Id" required=true max=1 }
+          new AvpRule { name="DRMP" required=false max=1 }
+          new AvpRule { name="Vendor-Specific-Application-Id" required=false max=1 }
+          new AvpRule { name="Auth-Session-State" required=true max=1 }
+          new AvpRule { name="Origin-Host" required=true max=1 }
+          new AvpRule { name="Origin-Realm" required=true max=1 }
+          new AvpRule { name="Destination-Host" required=false max=1 }
+          new AvpRule { name="Destination-Realm" required=true max=1 }
+          new AvpRule { name="MSISDN" required=false max=1 }
+          new AvpRule { name="User-Name" required=false max=1 }
+          new AvpRule { name="SMSMI-Correlation-ID" required=false max=1 }
+          new AvpRule { name="Supported-Features" required=false }
+          new AvpRule { name="SC-Address" required=false max=1 }
+          new AvpRule { name="SM-RP-MTI" required=false max=1 }
+          new AvpRule { name="SM-RP-SMEA" required=false max=1 }
+          new AvpRule { name="SRR-Flags" required=false max=1 }
+          new AvpRule { name="SM-Delivery-Not-Intended" required=false max=1 }
+          new AvpRule { name="Proxy-Info" required=false }
+          new AvpRule { name="Route-Record" required=false }
+        }
+        answer = new Listing {
+          new AvpRule { name="Session-Id" required=true max=1 }
+          new AvpRule { name="DRMP" required=false max=1 }
+          new AvpRule { name="Vendor-Specific-Application-Id" required=true max=1 }
+          new AvpRule { name="Result-Code" required=false max=1 }
+          new AvpRule { name="Experimental-Result" required=false max=1 }
+          new AvpRule { name="Auth-Session-State" required=true max=1 }
+          new AvpRule { name="Origin-Host" required=true max=1 }
+          new AvpRule { name="Origin-Realm" required=true max=1 }
+          new AvpRule { name="User-Name" required=false max=1 }
+          new AvpRule { name="Supported-Features" required=false }
+          new AvpRule { name="Serving-Node" required=false max=1 }
+          new AvpRule { name="Additional-Serving-Node" required=false max=1 }
+          new AvpRule { name="LMSI" required=false max=1 }
+          new AvpRule { name="User-Identifier" required=true max=1 }
+          new AvpRule { name="MWD-Status" required=false max=1 }
+          new AvpRule { name="MME-Absent-User-Diagnostic-SM" required=false max=1 }
+          new AvpRule { name="MSC-Absent-User-Diagnostic-SM" required=false max=1 }
+          new AvpRule { name="SGSN-Absent-User-Diagnostic-SM" required=false max=1 }
+          new AvpRule { name="Failed-AVP" required=false max=1 }
+          new AvpRule { name="Proxy-Info" required=false }
+          new AvpRule { name="Route-Record" required=false }
+        }
+      }
+    }
+  }
+
+  new App {
+    id = 16777255
+    name = "SLg"
+    vnd = "3GPP"
+    vnd_id = 10415
+    cmds = new Listing {
+      // Provide-Location-Request/Answer
+      new Command { code=8388620 name="Provide-Location" short="PL" flags=P
+        request = new Listing {
+          new AvpRule { name="Session-Id" required=true max=1 }
+          new AvpRule { name="Vendor-Specific-Application-Id" required=false max=1 }
+          new AvpRule { name="Auth-Session-State" required=true max=1 }
+          new AvpRule { name="Origin-Host" required=true max=1 }
+          new AvpRule { name="Origin-Realm" required=true max=1 }
+          new AvpRule { name="Destination-Host" required=true max=1 }
+          new AvpRule { name="Destination-Realm" required=true max=1 }
+          new AvpRule { name="SLg-Location-Type" required=true max=1 }
+          new AvpRule { name="User-Name" required=false max=1 }
+          new AvpRule { name="MSISDN" required=false max=1 }
+          new AvpRule { name="IMEI" required=false max=1 }
+          new AvpRule { name="LCS-EPS-Client-Name" required=true max=1 }
+          new AvpRule { name="LCS-Client-Type" required=true max=1 }
+          new AvpRule { name="LCS-Requestor-Name" required=false max=1 }
+          new AvpRule { name="LCS-Priority" required=false max=1 }
+          new AvpRule { name="LCS-QoS" required=false max=1 }
+          new AvpRule { name="Velocity-Requested" required=false max=1 }
+          new AvpRule { name="LCS-Supported-GAD-Shapes" required=false max=1 }
+          new AvpRule { name="LCS-Service-Type-ID" required=false max=1 }
+          new AvpRule { name="LCS-Codeword" required=false max=1 }
+          new AvpRule { name="LCS-Privacy-Check-Non-Session" required=false max=1 }
+          new AvpRule { name="LCS-Privacy-Check-Session" required=false max=1 }
+          new AvpRule { name="Service-Selection" required=false max=1 }
+          new AvpRule { name="Deferred-Location-Type" required=false max=1 }
+          new AvpRule { name="PLR-Flags" required=false max=1 }
+          new AvpRule { name="Supported-Features" required=false }
+          new AvpRule { name="Proxy-Info" required=false }
+          new AvpRule { name="Route-Record" required=false }
+        }
+        answer = new Listing {
+          new AvpRule { name="Vendor-Specific-Application-Id" required=true max=1 }
+          new AvpRule { name="Result-Code" required=false max=1 }
+          new AvpRule { name="Experimental-Result" required=false max=1 }
+          new AvpRule { name="Auth-Session-State" required=true max=1 }
+          new AvpRule { name="Origin-Host" required=true max=1 }
+          new AvpRule { name="Origin-Realm" required=true max=1 }
+          new AvpRule { name="Location-Estimate" required=false max=1 }
+          new AvpRule { name="Accuracy-Fulfilment-Indicator" required=false max=1 }
+          new AvpRule { name="Age-Of-Location-Estimate" required=false max=1 }
+          new AvpRule { name="Velocity-Estimate" required=false max=1 }
+          new AvpRule { name="EUTRAN-Positioning-Data" required=false max=1 }
+          new AvpRule { name="ECGI" required=false max=1 }
+          new AvpRule { name="GERAN-Positioning-Info" required=false max=1 }
+          new AvpRule { name="Cell-Global-Identity" required=false max=1 }
+          new AvpRule { name="UTRAN-Positioning-Info" required=false max=1 }
+          new AvpRule { name="Service-Area-Identity" required=false max=1 }
+          new AvpRule { name="Serving-Node" required=false max=1 }
+          new AvpRule { name="PLA-Flags" required=false max=1 }
+          new AvpRule { name="ESMLC-Cell-Info" required=false max=1 }
+          new AvpRule { name="Civic-Address" required=false max=1 }
+          new AvpRule { name="Barometric-Pressure" required=false max=1 }
+          new AvpRule { name="Supported-Features" required=false max=1 }
+          new AvpRule { name="Failed-AVP" required=false max=1 }
+          new AvpRule { name="Proxy-Info" required=false }
+          new AvpRule { name="Route-Record" required=false }
+        }
+      }
+
+      // Location-Report-Request/Answer
+      new Command { code=8388621 name="Location-Report" short="LR" flags=P
+        request = new Listing {
+          new AvpRule { name="Session-Id" required=true max=1 }
+        }
+        answer = new Listing {
+          new AvpRule { name="Vendor-Specific-Application-Id" required=true max=1 }
+          new AvpRule { name="Result-Code" required=false max=1 }
+          new AvpRule { name="Experimental-Result" required=false max=1 }
+          new AvpRule { name="Auth-Session-State" required=true max=1 }
+          new AvpRule { name="Origin-Host" required=true max=1 }
+          new AvpRule { name="Origin-Realm" required=true max=1 }
+        }
+      }
+    }
+  }
+
+  new App {
+    id = 16777291
+    name = "SLh"
+    vnd = "3GPP"
+    vnd_id = 10415
+    cmds = new Listing {
+      // LCS-Routing-Info-Request/Answer
+      new Command { code=8388622 name="LCS-Routing-Info" short="RI" flags=P
+        request = new Listing {
+          new AvpRule { name="Session-Id" required=true max=1 }
+          new AvpRule { name="Vendor-Specific-Application-Id" required=false max=1 }
+          new AvpRule { name="Auth-Session-State" required=true max=1 }
+          new AvpRule { name="Origin-Host" required=true max=1 }
+          new AvpRule { name="Origin-Realm" required=true max=1 }
+          new AvpRule { name="Destination-Host" required=true max=1 }
+          new AvpRule { name="Destination-Realm" required=true max=1 }
+          new AvpRule { name="User-Name" required=false max=1 }
+          new AvpRule { name="MSISDN" required=false max=1 }
+          new AvpRule { name="GMLC-Number" required=false max=1 }
+          new AvpRule { name="Supported-Features" required=false }
+          new AvpRule { name="Proxy-Info" required=false }
+          new AvpRule { name="Route-Record" required=false }
+        }
+        answer = new Listing {
+          new AvpRule { name="Session-Id" required=true max=1 }
+          new AvpRule { name="Vendor-Specific-Application-Id" required=true max=1 }
+          new AvpRule { name="Result-Code" required=false max=1 }
+          new AvpRule { name="Experimental-Result" required=false max=1 }
+          new AvpRule { name="Auth-Session-State" required=true max=1 }
+          new AvpRule { name="Origin-Host" required=true max=1 }
+          new AvpRule { name="Origin-Realm" required=true max=1 }
+          new AvpRule { name="Supported-Features" required=false }
+          new AvpRule { name="User-Name" required=false max=1 }
+          new AvpRule { name="MSISDN" required=false max=1 }
+          new AvpRule { name="Serving-Node" required=false max=1 }
+          new AvpRule { name="Additional-Serving-Node" required=false max=1 }
+          new AvpRule { name="LMSI" required=false max=1 }
+          new AvpRule { name="GMLC-Address" required=false max=1 }
+          new AvpRule { name="PPR-Address" required=false max=1 }
+          new AvpRule { name="RIA-Flags" required=false }
+          new AvpRule { name="Failed-AVP" required=false max=1 }
+          new AvpRule { name="Proxy-Info" required=false }
+          new AvpRule { name="Route-Record" required=false }
+        }
+      }
+    }
+  }
+
+  new App {
+    id = 	16777216
+    name = "Cx"
+    vnd = "3GPP"
+    vnd_id = 10415
+    cmds = new Listing {
+      // Server-Assignment-Request/Answer
+      new Command { code=301 name="Server-Assignment" short="SA" flags=P
+        request = new Listing {
+          new AvpRule { name="Session-Id" required=true max=1 }
+          new AvpRule { name="DRMP" required=false max=1 }
+          new AvpRule { name="Vendor-Specific-Application-Id" required=false max=1 }
+          new AvpRule { name="Auth-Session-State" required=true max=1 }
+          new AvpRule { name="Origin-Host" required=true max=1 }
+          new AvpRule { name="Origin-Realm" required=true max=1 }
+          new AvpRule { name="Destination-Host" required=false max=1 }
+          new AvpRule { name="Destination-Realm" required=true max=1 }
+          new AvpRule { name="User-Name" required=false max=1 }
+          new AvpRule { name="OC-Supported-Features" required=false max=1 }
+          new AvpRule { name="Supported-Features" required=false }
+          new AvpRule { name="Public-Identity" required=false }
+          new AvpRule { name="Wildcarded-Public-Identity" required=false max=1 }
+          new AvpRule { name="Server-Name" required=true max=1 }
+          new AvpRule { name="Server-Assignment-Type" required=true max=1 }
+          new AvpRule { name="User-Data-Already-Available" required=true max=1 }
+          new AvpRule { name="SCSCF-Restoration-Info" required=false max=1 }
+          new AvpRule { name="Multiple-Registration-Indication" required=false max=1 }
+          new AvpRule { name="Session-Priority" required=false max=1 }
+          new AvpRule { name="SAR-Flags" required=false max=1 }
+          new AvpRule { name="Proxy-Info" required=false }
+          new AvpRule { name="Route-Record" required=false }
+        }
+        answer = new Listing {
+          new AvpRule { name="Session-Id" required=true max=1 }
+          new AvpRule { name="DRMP" required=false max=1 }
+          new AvpRule { name="Vendor-Specific-Application-Id" required=true max=1 }
+          new AvpRule { name="Result-Code" required=false max=1 }
+          new AvpRule { name="Experimental-Result" required=false max=1 }
+          new AvpRule { name="Auth-Session-State" required=true max=1 }
+          new AvpRule { name="Origin-Host" required=true max=1 }
+          new AvpRule { name="Origin-Realm" required=true max=1 }
+          new AvpRule { name="User-Name" required=false max=1 }
+          new AvpRule { name="OC-Supported-Features" required=false max=1 }
+          new AvpRule { name="OC-OLR" required=false max=1 }
+          new AvpRule { name="Supported-Features" required=false }
+          new AvpRule { name="User-Data" required=false max=1 }
+          new AvpRule { name="Charging-Information" required=false max=1 }
+          new AvpRule { name="Associated-Identities" required=false max=1 }
+          new AvpRule { name="Loose-Route-Indication" required=false max=1 }
+          new AvpRule { name="SCSCF-Restoration-Info" required=false }
+          new AvpRule { name="Associated-Registered-Identities" required=false max=1 }
+          new AvpRule { name="Server-Name" required=false max=1 }
+          new AvpRule { name="Wildcarded-Public-Identity" required=false max=1 }
+          new AvpRule { name="Priviledged-Sender-Indication" required=false max=1 }
+          new AvpRule { name="Allowed-WAF-WWSF-Identities" required=false max=1 }
+          new AvpRule { name="Failed-AVP" required=false max=1 }
+          new AvpRule { name="Proxy-Info" required=false }
+          new AvpRule { name="Route-Record" required=false }
+        }
+      }
+    }
+  }
+}

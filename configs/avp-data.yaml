@@ -1,0 +1,90 @@
+#
+#
+#
+
+# User identities
+#
+User-Name: "123451234567890"
+MSISDN: "0123456789"
+IMEI: "123451234567890"
+Public-Identity: "sip:123451234567890@ims.mnc042.mcc042.3gppnetwork.org"
+
+# Global
+#
+Error-Message: "Error message"
+Host-IP-Address: 1.2.3.4
+Product-Name: DRA
+Origin-State-Id: 1
+Inband-Security-Id: 0
+Disconnect-Cause: DO_NOT_WANT_TO_TALK_TO_YOU
+
+Origin-Realm: epc.mnc042.mcc042.3gppnetwork.org
+Origin-Host: dra01.epc.mnc042.mcc042.3gppnetwork.org
+Session-Id: dra01.epc.mnc042.mcc042.3gppnetwork.org
+
+Destination-Realm: vn.mnc042.mcc042.3gppnetwork.org
+Destination-Host: dra01.vn.mnc042.mcc042.3gppnetwork.org
+
+Visited-PLMN-Id: 25001
+Visited-Network-Identifier: mnc042.mcc042.3gppnetwork.org
+
+Auth-Session-State: NO_STATE_MAINTAINED
+
+Context-Identifier: 123
+
+Vendor-Id: 10415
+
+Auth-Application-Id:
+  - 16777251
+  - 16777217
+  - 16777312
+
+Vendor-Specific-Application-Id:
+  Vendor-Id: 10415
+  Auth-Application-Id: 16777251
+
+RAT-Type: EUTRAN
+
+Cancellation-Type: SUBSCRIPTION_WITHDRAWWAL
+
+Result-Code: 2001
+
+Subscription-Data:
+  Subscriber-Status: SUBSCRIBER_ACTIVE
+  MSISDN: "0123456789"
+
+User-Identity:
+  Public-Identity: sip:+12345678904@ims.mnc042.mcc042.3gppnetwork.org
+
+# User-Data
+#
+Data-Reference:
+  - MSISDN
+  - STN-SR
+
+# Insert-Subscriber-Data
+#
+IDR-Flags: 8
+
+# Delete-Subscriber-Data
+#
+DSR-Flags: 2
+
+# Update-Location
+#
+ULR-Flags: 2
+
+# Notify
+#
+NOR-Flags: 768
+
+# Purge UE
+#
+PUR-Flags: 0
+PUA-Flags: 0
+
+# IMS
+#
+Server-Name: sip:172.16.102.81:5060
+Server-Assignment-Type: REGISTRATION
+User-Data-Already-Available: USER_DATA_NOT_AVAILABLE

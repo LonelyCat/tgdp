@@ -1,0 +1,1047 @@
+//
+// Project: TGDP - Traffic Generator for Diameter Protocol
+// Description: Simple tool for testing and debugging the Diameter protocol
+//
+// Author: Alexander Kefeli <alexander.kefeli@gmail.com>
+//
+// File: avps.pkl
+// Description: 3GPP Diameter AVPs definitions
+//
+
+module avps
+
+import "Diameter.pkl"
+
+//
+// Just simplify to improve readability
+// Do not edit >>>
+//
+typealias Avp     = Diameter.Avp
+typealias AvpRule = Diameter.AvpRule
+typealias Group   = Diameter.Group
+typealias Enum    = Diameter.Enum
+typealias Item    = Diameter.Item
+hidden V = Diameter.AvpFlags.V
+hidden M = Diameter.AvpFlags.M
+hidden P = Diameter.AvpFlags.P
+hidden OctetString     = Diameter.AvpTypes.OctetString
+hidden Integer32       = Diameter.AvpTypes.Integer32
+hidden Integer64       = Diameter.AvpTypes.Integer64
+hidden Unsigned32      = Diameter.AvpTypes.Unsigned32
+hidden Unsigned64      = Diameter.AvpTypes.Unsigned64
+hidden Float32         = Diameter.AvpTypes.Float32
+hidden Float64         = Diameter.AvpTypes.Float64
+hidden Address         = Diameter.AvpTypes.Address
+hidden Time            = Diameter.AvpTypes.Time
+hidden UTF8String      = Diameter.AvpTypes.UTF8String
+hidden Identity        = Diameter.AvpTypes.Identity
+hidden URI             = Diameter.AvpTypes.URI
+hidden Enumerated      = Diameter.AvpTypes.Enumerated
+hidden IPFilterRule    = Diameter.AvpTypes.IPFilterRule
+hidden QoSFilterRule   = Diameter.AvpTypes.QoSFilterRule
+hidden Grouped         = Diameter.AvpTypes.Grouped
+//
+// <<< Do not edit
+
+//
+// AVPs
+//
+Avps = new Listing {
+  new Avp { code=1471 name="3GPP2-MEID" flags=M+V vnd_id=10415 type=OctetString }
+
+  new Avp { code=1643 name="A-MSISDN" flags=M+V vnd_id=10415 type=OctetString }
+
+  new Avp { code=259 name="Acct-Application-Id" flags=M type=Unsigned32 }
+
+  new Avp { code=1612 name="Active-APN" flags=V vnd_id=10415 type=Grouped
+            group = new Group {
+              members = new Listing {
+                new AvpRule { name="Context-Identifier" required=true max=1 }
+                new AvpRule { name="Service-Selection" required=true max=1 }
+                new AvpRule { name="MIP6-Agent-Info" required=true max=1 }
+                new AvpRule { name="Visited-Network-Identifier" required=false max=1 }
+                new AvpRule { name="Specific-APN-Info" required=true max=1 }
+              }
+            }
+          }
+
+  new Avp { code=1435 name="AMBR" flags=M+V vnd_id=10415 type=Grouped
+            group = new Group {
+              members = new Listing {
+                new AvpRule { name="Max-Requested-Bandwidth-UL" required=true max=1 }
+                new AvpRule { name="Max-Requested-Bandwidth-DL" required=true max=1 }
+                new AvpRule { name="Extended-Max-Requested-BW-UL" required=true max=1 }
+                new AvpRule { name="Extended-Max-Requested-BW-DL" required=true max=1 }
+              }
+            }
+          }
+
+  new Avp { code=1679 name="AIR-Flags" flags=V vnd_id=10415 type=Unsigned32 }
+
+  new Avp { code=1430 name="APN-Configuration" flags=M+V vnd_id=10415 type=Grouped
+            group = new Group {
+              members = new Listing {
+                new AvpRule { name="Context-Identifier" required=true max=1 }
+                new AvpRule { name="Served-Party-IP-Address" required=false max=2 }
+                new AvpRule { name="PDN-Type" required=true max=1 }
+                new AvpRule { name="Service-Selection" required=true max=1 }
+                new AvpRule { name="EPS-Subscribed-QoS-Profile" required=false max=1 }
+                new AvpRule { name="VPLMN-Dynamic-Address-Allowed" required=false max=1 }
+                new AvpRule { name="MIP6-Agent-Info" required=false max=1 }
+                new AvpRule { name="Visited-Network-Identifier" required=false max=1 }
+                new AvpRule { name="PDN-GW-Allocation-Type" required=false max=1 }
+                new AvpRule { name="3GPP-Charging-Characteristics" required=false max=1 }
+                new AvpRule { name="AMBR" required=false max=1 }
+                new AvpRule { name="Specific-APN-Info" required=false }
+                new AvpRule { name="APN-OI-Replacement" required=false max=1 }
+                new AvpRule { name="SIPTO-Permission" required=false max=1 }
+                new AvpRule { name="LIPA-Permission" required=false max=1 }
+                new AvpRule { name="Restoration-Priority" required=false max=1 }
+                new AvpRule { name="SIPTO-Local-Network-Permission" required=false max=1 }
+                new AvpRule { name="WLAN-offloadability" required=false max=1 }
+                new AvpRule { name="Non-IP-PDN-Type-Indicator" required=false max=1 }
+                new AvpRule { name="Non-IP-Data-Delivery-Mechanism" required=false max=1 }
+                new AvpRule { name="SCEF-ID" required=false max=1 }
+                new AvpRule { name="SCEF-Realm" required=false max=1 }
+                new AvpRule { name="Preferred-Data-Mode" required=false max=1 }
+                new AvpRule { name="PDN-Connection-Continuity" required=false max=1 }
+                new AvpRule { name="RDS-Indicator" required=false max=1 }
+                new AvpRule { name="Interworking-5GS-Indicator" required=false max=1 }
+              }
+            }
+          }
+
+  new Avp { code=1429 name="APN-Configuration-Profile" flags=M+V vnd_id=10415 type=Grouped
+            group = new Group {
+              members = new Listing {
+                new AvpRule { name="Context-Identifier" required=true max=1 }
+                new AvpRule { name="All-APN-Configurations-Included-Indicator" required=true max=1 }
+                new AvpRule { name="APN-Configuration" required=true }
+              }
+            }
+          }
+
+  new Avp { code=1449 name="AUTN" flags=M+V vnd_id=10415 type=OctetString }
+
+  new Avp { code=1428 name="All-APN-Configurations-Included-Indicator" flags=M+V vnd_id=10415 type=Enumerated
+            enum = new Enum {
+              items = new Listing {
+                new Item { code=0 name="All_APN_CONFIGURATIONS_INCLUDED" }
+                new Item { code=1 name="MODIFIED_ADDED_APN_CONFIGURATIONS_INCLUDED" }
+              }
+            }
+          }
+
+  new Avp { code=1034 name="Allocation-Retention-Priority" flags=V vnd_id=10415 type=Grouped
+            group = new Group {
+              members = new Listing {
+                new AvpRule { name="Priority-Level" required=true max=1 }
+                new AvpRule { name="Pre-emption-Capability" required=false max=1 }
+                new AvpRule { name="Pre-emption-Vulnerability" required=false max=1 }
+              }
+            }
+          }
+
+  new Avp { code=258 name="Auth-Application-Id" flags=M type=Unsigned32 }
+
+  new Avp { code=277 name="Auth-Session-State" flags=M type=Enumerated
+            enum = new Enum {
+              items = new Listing {
+                new Item { code=0 name="STATE_MAINTAINED" }
+                new Item { code=1 name="NO_STATE_MAINTAINED" }
+              }
+            }
+          }
+
+  new Avp { code=1413 name="Authentication-Info" flags=M+V vnd_id=10415 type=Grouped
+            group = new Group {
+              members = new Listing {
+                new AvpRule { name="E-UTRAN-Vector" required=true }
+                new AvpRule { name="UTRAN-Vector" required=true }
+                new AvpRule { name="GERAN-Vector" required=true }
+              }
+            }
+          }
+
+  new Avp { code=1420 name="Cancellation-Type" flags=M+V vnd_id=10415 type=Enumerated
+            enum = new Enum {
+              items = new Listing {
+                new Item { code=0 name="MME_UPDATE_PROCEDURE" }
+                new Item { code=1 name="SGSN_UPDATE_PROCEDURE" }
+                new Item { code=2 name="SUBSCRIPTION_WITHDRAWWAL" }
+                new Item { code=3 name="UPDATE_PROCEDURE" }
+                new Item { code=4 name="INITITAL_ATTACH_PROCEDURE" }
+              }
+            }
+          }
+
+  new Avp { code=1638 name="CLR-Flags" flags=V vnd_id=10415 type=Unsigned32 }
+
+  new Avp { code=1423 name="Context-Identifier" flags=M+V vnd_id=10415 type=Unsigned32 }
+
+  new Avp { code=707 name="Current-Location" flags=M+V vnd_id=10415 type=Enumerated
+            enum = new Enum {
+              items = new Listing {
+                new Item { code=0 name="DoNotNeedInitiateActiveLocationRetrieval" }
+                new Item { code=1 name="InitiateActiveLocationRetrieval" }
+              }
+            }
+          }
+
+  new Avp { code=301 name="DRMP" type=Enumerated
+            enum = new Enum {
+              items = new Listing {
+                new Item { code=0 name="PRIORITY_0" }
+                new Item { code=1 name="PRIORITY_1" }
+                new Item { code=2 name="PRIORITY_2" }
+                new Item { code=3 name="PRIORITY_3" }
+                new Item { code=4 name="PRIORITY_4" }
+                new Item { code=5 name="PRIORITY_5" }
+                new Item { code=6 name="PRIORITY_6" }
+                new Item { code=7 name="PRIORITY_7" }
+                new Item { code=8 name="PRIORITY_8" }
+                new Item { code=9 name="PRIORITY_9" }
+                new Item { code=10 name="PRIORITY_10" }
+                new Item { code=11 name="PRIORITY_11" }
+                new Item { code=12 name="PRIORITY_12" }
+                new Item { code=13 name="PRIORITY_13" }
+                new Item { code=14 name="PRIORITY_14" }
+                new Item { code=15 name="PRIORITY_15" }
+              }
+            }
+          }
+
+  new Avp { code=703 name="Data-Reference" flags=M+V vnd_id=10415 type=Enumerated
+            enum = new Enum {
+              items = new Listing {
+                new Item { code=0 name="RepositoryData" }
+                new Item { code=10 name="IMSPublicIdentity" }
+                new Item { code=11 name="IMSUserState" }
+                new Item { code=12 name="S-CSCFName" }
+                new Item { code=13 name="InitialFilterCriteria" }
+                new Item { code=14 name="LocationInformation" }
+                new Item { code=15 name="UserState" }
+                new Item { code=16 name="ChargingInformation" }
+                new Item { code=17 name="MSISDN" }
+                new Item { code=18 name="PSIActivation" }
+                new Item { code=19 name="DSAI" }
+                new Item { code=20 name="Reserved" }
+                new Item { code=21 name="ServiceLevelTraceInfo" }
+                new Item { code=22 name="IPAddressSecureBindingInformation" }
+                new Item { code=23 name="ServicePriorityLevel" }
+                new Item { code=24 name="SMSRegistrationInfo" }
+                new Item { code=25 name="UEReachabilityForIP" }
+                new Item { code=26 name="TADSinformation" }
+                new Item { code=27 name="STN-SR" }
+                new Item { code=28 name="UE-SRVCC-Capability" }
+                new Item { code=29 name="ExtendedPriority" }
+                new Item { code=30 name="CSRN" }
+                new Item { code=31 name="ReferenceLocationInformation" }
+                new Item { code=32 name="IMSI" }
+                new Item { code=33 name="IMSPrivateUserIdentity" }
+              }
+            }
+          }
+
+  new Avp { code=293 name="Destination-Host" flags=M type=Identity }
+
+  new Avp { code=283 name="Destination-Realm" flags=M type=Identity }
+
+  new Avp { code=273 name="Disconnect-Cause" flags=M type=Enumerated
+            enum = new Enum {
+              items = new Listing {
+                new Item { code=0 name="REBOOTING" }
+                new Item { code=1 name="BUSY" }
+                new Item { code=2 name="DO_NOT_WANT_TO_TALK_TO_YOU" }
+              }
+            }
+          }
+
+  new Avp { code=1414 name="E-UTRAN-Vector" flags=M+V vnd_id=10415 type=Grouped
+            group = new Group {
+              members = new Listing {
+                new AvpRule { name="Item-Number" required=false max=1 }
+                new AvpRule { name="RAND" required=true max=1 }
+                new AvpRule { name="XRES" required=true max=1 }
+                new AvpRule { name="AUTN" required=true max=1 }
+                new AvpRule { name="KASME" required=true max=1 }
+              }
+            }
+          }
+
+  new Avp { code=1496 name="EPS-Location-Information" flags=V vnd_id=10415 type=Grouped
+            group = new Group {
+              members = new Listing {
+                new AvpRule { name="MME-Location-Information" required=false max=1 }
+                new AvpRule { name="SGSN-Location-Information" required=false max=1 }
+              }
+            }
+          }
+
+  new Avp { code=1431 name="EPS-Subscribed-QoS-Profile" flags=M+V vnd_id=10415 type=Grouped
+            group = new Group {
+              members = new Listing {
+                new AvpRule { name="QoS-Class-Identifier" required=true max=1 }
+                new AvpRule { name="Allocation-Retention-Priority" required=true max=1 }
+              }
+            }
+          }
+
+  new Avp { code=1495 name="EPS-User-State" flags=V vnd_id=10415 type=Grouped
+            group = new Group {
+              members = new Listing {
+                new AvpRule { name="MME-User-State" required=false max=1 }
+                new AvpRule { name="SGSN-User-State" required=false max=1 }
+              }
+            }
+          }
+
+  new Avp { code=1614 name="Error-Diagnostic" flags=V vnd_id=10415 type=Enumerated
+            enum = new Enum {
+              items = new Listing {
+                new Item { code=0 name="GPRS_DATA_SUBSCRIBED" }
+                new Item { code=1 name="NO_GPRS_DATA_SUBSCRIBED" }
+                new Item { code=2 name="ODB_ALL_APN" }
+                new Item { code=3 name="ODB_HPLMN_APN" }
+                new Item { code=4 name="ODB_VPLMN_APN" }
+              }
+            }
+          }
+
+  new Avp { code=281 name="Error-Message" type=UTF8String }
+
+  new Avp { code=297 name="Experimental-Result" flags=M type=Grouped
+            group = new Group {
+              members = new Listing {
+                new AvpRule { name="Vendor-Id" required=true max=1 }
+                new AvpRule { name="Experimental-Result-Code" required=true max=1 }
+              }
+            }
+          }
+
+  new Avp { code=298 name="Experimental-Result-Code" flags=M type=Unsigned32 }
+
+  new Avp { code=279 name="Failed-AVP" flags=V vnd_id=10415 type=Grouped
+            group = new Group {
+              members = new Listing {
+                new AvpRule { name="Operation-Mode" required=true max=1 }
+                new AvpRule { name="Paging-Time-Window-Length" required=true max=1 }
+              }
+            }
+          }
+
+  new Avp { code=554 name="Extended-Max-Requested-BW-DL" flags=V vnd_id=10415 type=Unsigned32 }
+
+  new Avp { code=555 name="Extended-Max-Requested-BW-UL" flags=V vnd_id=10415 type=Unsigned32 }
+
+  new Avp { code=630 name="Feature-List" flags=V vnd_id=10415 type=Unsigned32 }
+
+  new Avp { code=629 name="Feature-List-ID" flags=V vnd_id=10415 type=Unsigned32 }
+
+  new Avp { code=267 name="Firmware-Revision" flags=M type=Unsigned32 }
+
+  new Avp { code=1416 name="GERAN-Vector" flags=M+V vnd_id=10415 type=Grouped
+            group = new Group {
+              members = new Listing {
+                new AvpRule { name="Item-Number" required=false max=1 }
+                new AvpRule { name="RAND" required=true max=1 }
+                new AvpRule { name="SRES" required=true max=1 }
+                new AvpRule { name="Kc" required=true max=1 }
+              }
+            }
+  }
+
+  new Avp { code=2405 name="GMLC-Address" flags=V vnd_id=10415 type=Address }
+
+  new Avp { code=1493 name="Homogeneous-Support-of-IMS-Voice-Over-PS-Sessions" flags=V vnd_id=10415 type=Enumerated
+            enum = new Enum {
+              items = new Listing {
+                new Item { code=0 name="NOT_SUPPORTED" }
+                new Item { code=1 name="SUPPORTED" }
+              }
+            }
+          }
+
+  new Avp { code=1491 name="ICS-Indicator" flags=V vnd_id=10415 type=Enumerated
+            enum = new Enum {
+              items = new Listing {
+                new Item { code=0 name="FALSE" }
+                new Item { code=1 name="TRUE" }
+              }
+            }
+          }
+
+  new Avp { code=299 name="Inband-Security-Id" flags=M type=Unsigned32 }
+
+  new Avp { code= 1419 name="Item-Number" flags=M+V vnd_id=10415 type=Unsigned32 }
+
+  new Avp { code=257 name="Host-IP-Address" flags=M type=Address }
+
+  new Avp { code=1402 name="IMEI" flags=M+V vnd_id=10415 type=UTF8String }
+
+  new Avp { code=1450 name="KASME" flags=M+V vnd_id=10415 type=OctetString }
+
+  new Avp { code=515 name="Max-Requested-Bandwidth-DL" flags=M+V vnd_id=10415 type=Unsigned32 }
+
+  new Avp { code=516 name="Max-Requested-Bandwidth-UL" flags=M+V vnd_id=10415 type=Unsigned32 }
+
+  new Avp { code=486 name="MIP6-Agent-Info" flags=M type=Grouped
+            group = new Group {
+              members = new Listing {
+                new AvpRule { name="MIP-Home-Agent-Address" required=true max=2 }
+                new AvpRule { name="MIP-Home-Agent-Host" required=true max=1 }
+                new AvpRule { name="MIP6-Home-Link-Prefix" required=true max=1 }
+              }
+            }
+          }
+
+  new Avp { code=125 name="MIP6-Home-Link-Prefix" flags=M type=OctetString }
+
+  new Avp { code=334 name="MIP-Home-Agent-Address" flags=M type=Address }
+
+  new Avp { code=348 name="MIP-Home-Agent-Host" flags=M type=Grouped
+            group = new Group {
+              members = new Listing {
+                new AvpRule { name="Destination-Realm" required=true max=1 }
+                new AvpRule { name="Destination-Host" required=true max=1 }
+              }
+            }
+          }
+
+  new Avp { code=1600 name="MME-Location-Information" flags=V vnd_id=10415 type=Grouped
+            group = new Group {
+              members = new Listing {
+                new AvpRule { name="E-UTRAN-Cell-Global-Identity" required=false max=1 }
+                new AvpRule { name="Tracking-Area-Identity" required=false max=1 }
+                new AvpRule { name="Geographical-Information" required=false max=1 }
+                new AvpRule { name="Geodetic-Information" required=false max=1 }
+                new AvpRule { name="Current-Location-Retrieved" required=false max=1 }
+                new AvpRule { name="Age-Of-Location-Information" required=false max=1 }
+                new AvpRule { name="User-CSG-Information" required=false max=1 }
+                new AvpRule { name="eNodeB-ID" required=false max=1 }
+                new AvpRule { name="Extended-eNodeB-ID" required=false max=1 }
+              }
+            }
+          }
+
+  new Avp { code=1497 name="MME-User-State" flags=V vnd_id=10415 type=Grouped
+            group = new Group {
+              members = new Listing {
+                new AvpRule { name="User-State" required=false max=1 }
+              }
+            }
+          }
+
+  new Avp { code=701 name="MSISDN" flags=M+V vnd_id=10415 type=OctetString }
+
+  new Avp { code=1417 name="Network-Access-Mode" flags=V vnd_id=10415 type=Enumerated
+            enum = new Enum {
+              items = new Listing {
+                new Item { code=0 name="PACKET_AND_CIRCUIT" }
+                new Item { code=1 name="RESERVED" }
+                new Item { code=2 name="ONLY_PACKET" }
+              }
+            }
+          }
+
+  new Avp { code=1443 name="NOR-Flags" flags=M+V vnd_id=10415 type=Unsigned32 }
+
+  new Avp { code=623 name="OC-OLR" type=Grouped
+            group = new Group {
+              members = new Listing {
+                new AvpRule { name="OC-Sequence-Number" required=true }
+                new AvpRule { name="OC-Report-Type" required=true }
+                new AvpRule { name="OC-Reduction-Percentage" required=false }
+                new AvpRule { name="OC-Validity-Duration" required=false }
+              }
+            }
+          }
+
+  new Avp { code=622 name="OC-Feature-Vector" flags=M type=Unsigned64 }
+
+  new Avp { code=621 name="OC-Supported-Features" type=Grouped
+            group = new Group {
+              members = new Listing {
+                new AvpRule { name="OC-Feature-Vector" required=true }
+              }
+            }
+          }
+
+  new Avp { code=1702 name="Operation-Mode" flags=V vnd_id=10415 type=Unsigned32 }
+
+  new Avp { code=264 name="Origin-Host" flags=M type=Identity }
+
+  new Avp { code=296 name="Origin-Realm" flags=M type=Identity }
+
+  new Avp { code=278 name="Origin-State-Id" flags=M type=Unsigned32 }
+
+  new Avp { code=1442 name="PUA-Flags" flags=M vnd_id=10415 type=Unsigned32 }
+
+  new Avp { code=637 name="PUR-Flags" vnd_id=10415 type=Unsigned32 }
+
+  new Avp { code=1703 name="Paging-Time-Window-Length" flags=V vnd_id=10415 type=Unsigned32 }
+
+  new Avp { code=1456 name="PDN-Type" flags=M+V vnd_id=10415 type=Enumerated
+            enum = new Enum {
+              items = new Listing {
+                new Item { code=0 name="IPv4" }
+                new Item { code=1 name="IPv6" }
+                new Item { code=2 name="IPv4v6" }
+                new Item { code=3 name="IPv4_OR_IPv6" }
+              }
+            }
+          }
+
+  new Avp { code=1438 name="PDN-GW-Allocation-Type" flags=M+V vnd_id=10415 type=Enumerated
+            enum = new Enum {
+              items = new Listing {
+                new Item { code=0 name="DYNAMIC" }
+                new Item { code=1 name="STATIC" }
+              }
+            }
+          }
+
+  new Avp { code=1047 name="Pre-emption-Capability" flags=V vnd_id=10415 type=Enumerated
+            enum = new Enum {
+              items = new Listing {
+                new Item { code=0 name="NOT_CAPABLE" }
+                new Item { code=1 name="CAPABLE" }
+              }
+            }
+          }
+
+  new Avp { code=1048 name="Pre-emption-Vulnerability" flags=V vnd_id=10415 type=Enumerated
+            enum = new Enum {
+              items = new Listing {
+                new Item { code=0 name="NOT_VULNERABLE" }
+                new Item { code=1 name="VULNERABLE" }
+              }
+            }
+          }
+
+  new Avp { code=1046 name="Priority-Level" flags=V vnd_id=10415 type=Unsigned32 }
+
+  new Avp { code=269 name="Product-Name" flags=M type=UTF8String }
+
+  new Avp { code=280 name="Proxy-Host" flags=M type=Identity }
+
+  new Avp { code=284 name="Proxy-Info" flags=M type=Grouped
+            group = new Group {
+              members = new Listing {
+                new AvpRule { name="Proxy-Host" required=true max=1 }
+                new AvpRule { name="Proxy-State" required=true max=1 }
+              }
+            }
+          }
+
+  new Avp { code=33 name="Proxy-State" flags=M type=OctetString }
+
+  new Avp { code=601 name="Public-Identity" flags=M+V vnd_id=10415 type=UTF8String }
+
+  new Avp { code=1028 name="QoS-Class-Identifier" flags=M+V vnd_id=10415 type=Enumerated
+            enum = new Enum {
+              items = new Listing {
+                new Item { code=1 name="QCI_1" }
+                new Item { code=2 name="QCI_2" }
+                new Item { code=3 name="QCI_3" }
+                new Item { code=4 name="QCI_4" }
+                new Item { code=5 name="QCI_5" }
+                new Item { code=6 name="QCI_6" }
+                new Item { code=7 name="QCI_7" }
+                new Item { code=8 name="QCI_8" }
+                new Item { code=9 name="QCI_9" }
+              }
+            }
+          }
+
+  new Avp { code=1447 name="RAND" flags=M+V vnd_id=10415 type=OctetString }
+
+  new Avp { code=1032 name="RAT-Type" flags=V vnd_id=10415 type=Enumerated
+            enum = new Enum {
+              items = new Listing {
+                new Item { code=0    name="WLAN" }
+                new Item { code=1    name="VIRTUAL" }
+                new Item { code=1000 name="UTRAN" }
+                new Item { code=1001 name="GERAN" }
+                new Item { code=1002 name="GAN" }
+                new Item { code=1003 name="HSPA_EVOLUTION" }
+                new Item { code=1004 name="EUTRAN" }
+                new Item { code=1006 name="5GNR" }
+                new Item { code=2000 name="CDMA2000" }
+                new Item { code=2001 name="HRPD" }
+                new Item { code=2002 name="UMB" }
+                new Item { code=2003 name="EHRPD" }
+              }
+            }
+          }
+
+  new Avp { code=706 name="Requested-Domain" flags=M+V vnd_id=10415 type=Enumerated
+            enum = new Enum {
+              items = new Listing {
+                new Item { code=0 name="CS-Domain" }
+                new Item { code=1 name="PS-Domain" }
+              }
+            }
+          }
+
+  new Avp { code=713 name="Requested-Nodes" flags=M+V vnd_id=10415 type=Unsigned32 }
+
+  new Avp { code=1408 name="Requested-EUTRAN-Authentication-Info" flags=M+V vnd_id=10415 type=Grouped
+            group = new Group {
+              members = new Listing {
+                new AvpRule { name="Number-Of-Requested-Vectors" required=true max=1 }
+                new AvpRule { name="Immediate-Response-Preferred" required=true max=1 }
+                new AvpRule { name="Re-Synchronization-Info" required=true max=1 }
+              }
+            }
+          }
+
+  new Avp { code=1409 name="Requested-UTRAN-GERAN-Authentication-Info" flags=M+V vnd_id=10415 type=Grouped
+            group = new Group {
+              members = new Listing {
+                new AvpRule { name="Number-Of-Requested-Vectors" required=true max=1 }
+                new AvpRule { name="Immediate-Response-Preferred" required=true max=1 }
+                new AvpRule { name="Re-Synchronization-Info" required=true max=1 }
+              }
+            }
+          }
+
+  new Avp { code=1670 name="Reset-ID" flags=V vnd_id=10415 type=OctetString }
+
+  new Avp { code=268 name="Result-Code" flags=M type=Unsigned32 }
+
+  new Avp { code=282 name="Route-Record" flags=M type=Identity }
+
+  new Avp { code=1489 name="SGSN-Number" flags=M+V vnd_id=10415 type=OctetString }
+
+  new Avp { code=1498 name="SGSN-User-State" flags=V vnd_id=10415 type=Grouped
+            group = new Group {
+              members = new Listing {
+                new AvpRule { name="User-State" required=false max=1 }
+              }
+            }
+          }
+
+  new Avp { code=614 name="Server-Assignment-Type" flags=M+V vnd_id=10415 type=Enumerated
+            enum = new Enum {
+              items = new Listing {
+                new Item { code=0 name="NO_ASSIGNMENT" }
+                new Item { code=1 name="REGISTRATION" }
+                new Item { code=2 name="RE_REGISTRATION" }
+                new Item { code=3 name="USER_DEREGISTRATION" }
+              }
+            }
+          }
+
+  new Avp { code=602 name="Server-Name" flags=M+V vnd_id=10415 type=UTF8String }
+
+  new Avp { code=493 name="Service-Selection" flags=M type=UTF8String }
+
+  new Avp { code=263 name="Session-Id" flags=M type=UTF8String }
+
+  new Avp { code=1403 name="Software-Version" flags=M+V vnd_id=10415 type=UTF8String }
+
+  new Avp { code=1472 name="Specific-APN-Info" flags=M+V vnd_id=10415 type=Grouped
+            group = new Group {
+              members = new Listing {
+                new AvpRule { name="Service-Selection" required=true max=1 }
+                new AvpRule { name="MIP6-Agent-Info" required=true max=1 }
+                new AvpRule { name="Visited-Network-Identifier" required=true max=1 }
+              }
+            }
+          }
+
+  new Avp { code=1400 name="Subscription-Data" flags=M+V vnd_id=10415 type=Grouped
+            group = new Group {
+              members = new Listing {
+                new AvpRule { name="Subscriber-Status" required=false max=1 }
+                new AvpRule { name="MSISDN" required=false max=1 }
+                new AvpRule { name="A-MSISDN" required=false max=1 }
+                new AvpRule { name="STN-SR" required=false max=1 }
+                new AvpRule { name="ICS-Indicator" required=false max=1 }
+                new AvpRule { name="Network-Access-Mode" required=false max=1 }
+                new AvpRule { name="Operator-Determined-Barring" required=false max=1 }
+                new AvpRule { name="HPLMN-ODB" required=false max=1 }
+                new AvpRule { name="Regional-Subscription-Zone-Code" required=false max=10 }
+                new AvpRule { name="Access-Restriction-Data" required=false max=1 }
+                new AvpRule { name="APN-OI-Replacement" required=false max=1 }
+                new AvpRule { name="LCS-Info" required=false max=1 }
+                new AvpRule { name="Teleservice-List" required=false max=1 }
+                new AvpRule { name="Call-Barring-Info" required=false }
+                new AvpRule { name="3GPP-Charging-Characteristics" required=false max=1 }
+                new AvpRule { name="AMBR" required=false max=1 }
+                new AvpRule { name="APN-Configuration-Profile" required=false max=1 }
+                new AvpRule { name="RAT-Frequency-Selection-Priority-ID" required=false max=1 }
+                new AvpRule { name="Trace-Data" required=false max=1 }
+                new AvpRule { name="GPRS-Subscription-Data" required=false max=1 }
+                new AvpRule { name="CSG-Subscription-Data" required=false }
+                new AvpRule { name="Roaming-Restricted-Due-To-Unsupported-Feature" required=false max=1 }
+                new AvpRule { name="Subscribed-Periodic-RAU-TAU-Timer" required=false max=1 }
+                new AvpRule { name="MPS-Priority" required=false max=1 }
+                new AvpRule { name="VPLMN-LIPA-Allowed" required=false max=1 }
+                new AvpRule { name="Relay-Node-Indicator" required=false max=1 }
+                new AvpRule { name="MDT-User-Consent" required=false max=1 }
+                new AvpRule { name="Subscribed-VSRVCC" required=false max=1 }
+                new AvpRule { name="ProSe-Subscription-Data" required=false max=1 }
+                new AvpRule { name="Subscription-Data-Flags" required=false max=1 }
+                new AvpRule { name="Adjacent-Access-Restriction-Data" required=false }
+                new AvpRule { name="DL-Buffering-Suggested-Packet-Count" required=false max=1 }
+                new AvpRule { name="IMSI-Group-Id" required=false }
+                new AvpRule { name="UE-Usage-Type" required=false max=1 }
+                new AvpRule { name="AESE-Communication-Pattern" required=false max=1 }
+                new AvpRule { name="Monitoring-Event-Configuration" required=false max=1 }
+                new AvpRule { name="Emergency-Info" required=false max=1 }
+                new AvpRule { name="V2X-Subscription-Data" required=false max=1 }
+                new AvpRule { name="eDRX-Cycle-Length" required=false }
+                new AvpRule { name="External-Identifier" required=false max=1 }
+                new AvpRule { name="Active-Time" required=false max=1 }
+                new AvpRule { name="Service-Gap-Time" required=false max=1 }
+                new AvpRule { name="Broadcast-Location-Assistance-Data-Types" required=false max=1 }
+                new AvpRule { name="Aerial-UE-Subscription-Information" required=false max=1 }
+                new AvpRule { name="Core-Network-Restrictions" required=false max=1 }
+                new AvpRule { name="Paging-Time-Window" required=false }
+              }
+            }
+          }
+
+  new Avp { code=628 name="Supported-Features" flags=V vnd_id=10415 type=Grouped
+            group = new Group{
+              members = new Listing {
+                new AvpRule { name="Vendor-Id" required=true max=1 }
+                new AvpRule { name="Feature-List-ID" required=false max=1 }
+                new AvpRule { name="Feature-List" required=false max=1 }
+              }
+            }
+          }
+
+  new Avp { code=265 name="Supported-Vendor-Id" type=Unsigned32 }
+
+  new Avp { code=1401 name="Terminal-Information" flags=M+V vnd_id=10415 type=Grouped
+            group = new Group {
+              members = new Listing {
+                new AvpRule { name="IMEI" required=false max=1 }
+                new AvpRule { name="3GPP2-MEID" required=false max=1 }
+                new AvpRule { name="Software-Version" required=false max=1 }
+              }
+            }
+          }
+
+  new Avp { code=1603 name="Tracking-Area-Identity" flags=V vnd_id=10415 type=OctetString }
+
+  new Avp { code=1415 name="UTRAN-Vector" flags=M+V vnd_id=10415 type=Grouped
+            group = new Group {
+              members = new Listing {
+                new AvpRule { name="Item-Number" required=false max=1 }
+                new AvpRule { name="RAND" required=true max=1 }
+                new AvpRule { name="XRES" required=true max=1 }
+                new AvpRule { name="AUTN" required=true max=1 }
+                new AvpRule { name="CK" required=true max=1 }
+                new AvpRule { name="IK" required=true max=1 }
+              }
+            }
+  }
+
+  new Avp { code=1618 name="UE-Usage-Type" flags=V vnd_id=10415 type=Unsigned32 }
+
+  new Avp { code=1615 name="UE-SRVCC-Capability" flags=V vnd_id=10415 type=Enumerated
+            enum = new Enum {
+              items = new Listing {
+                new Item { code=0 name="UE-SRVCC-CAPABILITY-NOT-SUPPORTED" }
+                new Item { code=1 name="UE-SRVCC-CAPABILITY-SUPPORTED" }
+              }
+            }
+          }
+
+  new Avp { code=624 name="User-Data-Already-Available" flags=M+V vnd_id=10415 type=Enumerated
+            enum = new Enum {
+              items = new Listing {
+                new Item { code=0 name="USER_DATA_NOT_AVAILABLE" }
+                new Item { code=1 name="USER_DATA_ALREADY_AVAILABLE" }
+              }
+            }
+          }
+
+  new Avp { code=700 name="User-Identity" flags=M+V vnd_id=10415 type=Grouped
+            group = new Group {
+              members = new Listing {
+                new AvpRule { name="Public-Identity" required=false max=1 }
+                new AvpRule { name="MSISDN" required=false max=1 }
+              }
+            }
+          }
+
+  new Avp { code=1406 name="ULA-Flags" flags=M+V vnd_id=10415 type=Unsigned32 }
+
+  new Avp { code=1405 name="ULR-Flags" flags=M+V vnd_id=10415 type=Unsigned32 }
+
+  new Avp { code=1 name="User-Name" flags=M type=UTF8String }
+
+  new Avp { code=1499 name="User-State" flags=V vnd_id=10415 type=Enumerated
+            enum = new Enum {
+              items = new Listing {
+                new Item { code=0 name="DETACHED" }
+                new Item { code=1 name="ATTACHED_NOT_REACHABLE_FOR_PAGING" }
+                new Item { code=2 name="ATTACHED_REACHABLE_FOR_PAGING" }
+                new Item { code=3 name="CONNECTED_NOT_REACHABLE_FOR_PAGING" }
+                new Item { code=4 name="CONNECTED_REACHABLE_FOR_PAGING" }
+                new Item { code=5 name="NETWORK_DETERMINED_NOT_REACHABLE" }
+              }
+            }
+          }
+
+
+  new Avp { code=1432 name="VPLMN-Dynamic-Address-Allowed" flags=M+V vnd_id=10415 type=Enumerated
+            enum = new Enum {
+              items = new Listing {
+                new Item { code=0 name="NOTALLOWED" }
+                new Item { code=1 name="ALLOWED" }
+              }
+            }
+          }
+
+  new Avp { code=260 name="Vendor-Specific-Application-Id" flags=M type=Grouped
+            group = new Group {
+              members = new Listing {
+                new AvpRule { name="Vendor-Id" required=true max=1 }
+                new AvpRule { name="Auth-Application-Id" required=false max=1 }
+                new AvpRule { name="Acct-Application-Id" required=false max=1 }
+              }
+            }
+          }
+
+  new Avp { code=600 name="Visited-Network-Identifier" flags=V vnd_id=10415 type=OctetString }
+
+  new Avp { code=266 name="Vendor-Id" flags=M type=Unsigned32 }
+
+  new Avp { code=1407 name="Visited-PLMN-Id" flags=M+V vnd_id=10415 type=OctetString }
+
+  new Avp { code=1633 name="MME-Number-for-MT-SMS" flags=V vnd_id=10415 type=OctetString }
+
+  new Avp { code=1648 name="SMS-Register-Request" flags=V vnd_id=10415 type=Enumerated
+            enum = new Enum {
+              items = new Listing {
+                new Item { code=0 name="SMS_REGISTRATION_REQUIRED" }
+                new Item { code=1 name="SMS_REGISTRATION_NOT_REQUIRED" }
+              }
+            }
+          }
+
+  new Avp { code=1616 name="SGs-MME-Identity" flags=V vnd_id=10415 type=UTF8String }
+
+  new Avp { code=1617 name="Coupled-Node-Diameter-ID" flags=V vnd_id=10415 type=Identity }
+
+  new Avp { code=1672 name="Adjacent-PLMNs" flags=V vnd_id=10415 type=Grouped
+            group = new Group {
+              members = new Listing {
+                new AvpRule { name="Visited-PLMN-Id" required=true }
+              }
+            }
+          }
+
+  new Avp { code=1619 name="Supported-Services" flags=V vnd_id=10415 type=Grouped
+            group = new Group {
+              members = new Listing {
+                new AvpRule { name="Supported-Monitoring-Events" required=false max=1 }
+              }
+            }
+          }
+
+  new Avp { code=1620 name="ULA-Flags" flags=V vnd_id=10415 type=Unsigned32 }
+
+  new Avp { code=1490 name="IDR-Flags" flags=V vnd_id=10415 type=Unsigned32 }
+
+  new Avp { code=1622 name="IMS-Voice-Over-PS-Sessions-Supported" flags=V vnd_id=10415 type=Enumerated
+            enum = new Enum {
+              items = new Listing {
+                new Item { code=0 name="NOT_SUPPORTED" }
+                new Item { code=1 name="SUPPORTED" }
+              }
+            }
+          }
+
+  new Avp { code=1623 name="Last-UE-Activity-Time" flags=V vnd_id=10415 type=Time }
+
+  new Avp { code=1624 name="IDA-Flags" flags=V vnd_id=10415 type=Unsigned32 }
+
+  new Avp { code=1625 name="EPS-User-State" flags=V vnd_id=10415 type=Grouped
+            group = new Group {
+              members = new Listing {
+                new AvpRule { name="MME-User-State" required=false max=1 }
+                new AvpRule { name="SGSN-User-State" required=false max=1 }
+              }
+            }
+          }
+
+  new Avp { code=1626 name="EPS-Location-Information" flags=V vnd_id=10415 type=Grouped
+            group = new Group {
+              members = new Listing {
+                new AvpRule { name="MME-Location-Information" required=false max=1 }
+                new AvpRule { name="SGSN-Location-Information" required=false max=1 }
+              }
+            }
+          }
+
+  new Avp { code=1627 name="MME-User-State" flags=V vnd_id=10415 type=Enumerated
+            enum = new Enum {
+              items = new Listing {
+                new Item { code=0 name="IDLE" }
+                new Item { code=1 name="CONNECTED" }
+                new Item { code=2 name="RESTRICTED" }
+              }
+            }
+          }
+
+  new Avp { code=1628 name="SGSN-User-State" flags=V vnd_id=10415 type=Enumerated
+            enum = new Enum {
+              items = new Listing {
+                new Item { code=0 name="IDLE" }
+                new Item { code=1 name="CONNECTED" }
+                new Item { code=2 name="RESTRICTED" }
+                new Item { code=3 name="READY" }
+                new Item { code=4 name="STANDBY" }
+              }
+            }
+          }
+
+  new Avp { code=1629 name="Local-Time-Zone" flags=V vnd_id=10415 type=Grouped
+            group = new Group {
+              members = new Listing {
+                new AvpRule { name="Time-Zone" required=true max=1 }
+                new AvpRule { name="Daylight-Saving-Time" required=true max=1 }
+              }
+            }
+          }
+
+  new Avp { code=1422 name="DSA-Flags" flags=M+V vnd_id=10415 type=Unsigned32 }
+
+  new Avp { code=1421 name="DSR-Flags" flags=M+V vnd_id=10415 type=Unsigned32 }
+
+  new Avp { code=1632 name="SCEF-ID" flags=V vnd_id=10415 type=Identity }
+
+  new Avp { code=1634 name="Trace-Reference" flags=V vnd_id=10415 type=OctetString }
+
+  new Avp { code=1635 name="TS-Code" flags=V vnd_id=10415 type=OctetString }
+
+  new Avp { code=1636 name="SS-Code" flags=V vnd_id=10415 type=OctetString }
+
+  new Avp { code=1637 name="Equivalent-PLMN-List" flags=V vnd_id=10415 type=Grouped
+            group = new Group {
+              members = new Listing {
+                new AvpRule { name="Visited-PLMN-Id" required=true }
+              }
+            }
+          }
+
+  new Avp { code=1639 name="Time-Zone" flags=V vnd_id=10415 type=UTF8String }
+
+  new Avp { code=1640 name="Daylight-Saving-Time" flags=V vnd_id=10415 type=Enumerated
+            enum = new Enum {
+              items = new Listing {
+                new Item { code=0 name="NO_ADJUSTMENT" }
+                new Item { code=1 name="PLUS_ONE_HOUR" }
+                new Item { code=2 name="PLUS_TWO_HOURS" }
+              }
+            }
+          }
+
+  new Avp { code=1641 name="MME-Location-Information" flags=V vnd_id=10415 type=Grouped
+            group = new Group {
+              members = new Listing {
+                new AvpRule { name="E-UTRAN-Cell-Global-Identity" required=false max=1 }
+                new AvpRule { name="Tracking-Area-Identity" required=false max=1 }
+                new AvpRule { name="Geographical-Information" required=false max=1 }
+                new AvpRule { name="Geodetic-Information" required=false max=1 }
+                new AvpRule { name="Current-Location-Retrieved" required=false max=1 }
+                new AvpRule { name="Age-Of-Location-Information" required=false max=1 }
+              }
+            }
+          }
+
+  new Avp { code=1642 name="SGSN-Location-Information" flags=V vnd_id=10415 type=Grouped
+            group = new Group {
+              members = new Listing {
+                new AvpRule { name="Cell-Global-Identity" required=false max=1 }
+                new AvpRule { name="Location-Area-Identity" required=false max=1 }
+                new AvpRule { name="Service-Area-Identity" required=false max=1 }
+                new AvpRule { name="Routing-Area-Identity" required=false max=1 }
+                new AvpRule { name="Geographical-Information" required=false max=1 }
+                new AvpRule { name="Geodetic-Information" required=false max=1 }
+                new AvpRule { name="Current-Location-Retrieved" required=false max=1 }
+                new AvpRule { name="Age-Of-Location-Information" required=false max=1 }
+              }
+            }
+          }
+
+  new Avp { code=1424 name="Subscriber-Status" flags=M+V vnd_id=10415 type=Enumerated
+            enum = new Enum {
+              items = new Listing {
+                new Item { code=0 name="SUBSCRIBER_ACTIVE" }
+                new Item { code=1 name="SUBSCRIBER_DISABLED" }
+              }
+            }
+          }
+
+  new Avp { code=1602 name="E-UTRAN-Cell-Global-Identity" flags=V vnd_id=10415 type=OctetString }
+
+  new Avp { code=1644 name="Tracking-Area-Identity" flags=V vnd_id=10415 type=OctetString }
+
+  new Avp { code=1645 name="Cell-Global-Identity" flags=V vnd_id=10415 type=OctetString }
+
+  new Avp { code=1646 name="Location-Area-Identity" flags=V vnd_id=10415 type=OctetString }
+
+  new Avp { code=1647 name="Service-Area-Identity" flags=V vnd_id=10415 type=OctetString }
+
+  new Avp { code=1605 name="Routing-Area-Identity" flags=V vnd_id=10415 type=OctetString }
+
+  new Avp { code=1649 name="Geographical-Information" flags=V vnd_id=10415 type=UTF8String }
+
+  new Avp { code=1650 name="Geodetic-Information" flags=V vnd_id=10415 type=UTF8String }
+
+  new Avp { code=1651 name="Current-Location-Retrieved" flags=V vnd_id=10415 type=Enumerated
+            enum = new Enum {
+              items = new Listing {
+                new Item { code=0 name="ACTIVE_LOCATION_RETRIEVAL" }
+              }
+            }
+          }
+
+  new Avp { code=1652 name="Age-Of-Location-Information" flags=V vnd_id=10415 type=Unsigned32 }
+
+  new Avp { code=1653 name="Requested-EUTRAN-Authentication-Info" flags=M+V vnd_id=10415 type=Grouped
+            group = new Group {
+              members = new Listing {
+                new AvpRule { name="Number-Of-Requested-Vectors" required=true max=1 }
+                new AvpRule { name="Immediate-Response-Preferred" required=false max=1 }
+                new AvpRule { name="Re-synchronization-Info" required=false max=1 }
+              }
+            }
+          }
+
+  new Avp { code=1654 name="Number-Of-Requested-Vectors" flags=M+V vnd_id=10415 type=Unsigned32 }
+
+  new Avp { code=1655 name="Re-synchronization-Info" flags=V vnd_id=10415 type=OctetString }
+
+  new Avp { code=1656 name="Immediate-Response-Preferred" flags=V vnd_id=10415 type=Unsigned32 }
+
+  new Avp { code=1040 name="Priority-Level" flags=V vnd_id=10415 type=Unsigned32 }
+
+  new Avp { code=1041 name="Pre-emption-Capability" flags=V vnd_id=10415 type=Enumerated
+            enum = new Enum {
+              items = new Listing {
+                new Item { code=0 name="NOT_CAPABLE" }
+                new Item { code=1 name="CAPABLE" }
+              }
+            }
+          }
+
+  new Avp { code=1042 name="Pre-emption-Vulnerability" flags=V vnd_id=10415 type=Enumerated
+            enum = new Enum {
+              items = new Listing {
+                new Item { code=0 name="NOT_VULNERABLE" }
+                new Item { code=1 name="VULNERABLE" }
+              }
+            }
+          }
+
+  new Avp { code=1448 name="XRES" flags=M+V vnd_id=10415 type=OctetString }
+}

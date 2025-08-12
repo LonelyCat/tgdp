@@ -1,0 +1,43 @@
+---
+test:
+    type: dra
+    address: localhost
+    port: 3868
+    transport: tcp
+
+dra1:
+    type: dra
+    address: 172.19.101.201
+    port: 3868
+    transport: sctp
+
+dra2:
+    type: dra
+    address: 172.19.101.202
+    port: 3868
+    transport: sctp
+
+hss1:
+    type: hss
+    address: 198.18.11.99
+    port: 3868
+    transport: tcp
+    timeout: 30
+
+hss2:
+    type: hss
+    address: 198.18.11.99
+    port: 3868
+#   transport: tcp 
+
+mme1:
+    type: mme
+    address: 172.19.101.155
+    port: 3868
+    transport: sctp
+
+pcrf1:
+    type: pcrf
+    address: 192.168.23.11
+    port: 3871
+    transport: tcp
