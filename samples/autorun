@@ -1,0 +1,16 @@
+# TGDP autorun example
+#
+
+# Greeting
+#
+version
+echo Welcome to TGDP !
+echo
+
+# Set verbosity level to maximum
+#
+verbose 3
+
+# Connect to an peer called "dra"
+#
+connect dra

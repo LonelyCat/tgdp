@@ -1,0 +1,7 @@
+# TGDP batch example
+#
+
+verbose 3
+echo --- Connect to DRA ---
+connect dra
+verbose 2

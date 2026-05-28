@@ -1,0 +1,129 @@
+//
+// Project: TGDP - Traffic Generator for Diameter Protocol
+// Description: Simple tool for testing and debugging the Diameter protocol
+//
+// Author: Alexander Kefeli <alexander.kefeli@gmail.com>
+//
+// File: Diameter.pkl
+// Description: Diameter core definition
+//
+
+@go.Package { name = "/diameter/dict" }
+
+abstract module Diameter
+
+import "package://pkg.pkl-lang.org/pkl-go/pkl.golang@0.13.2#/go.pkl"
+
+// Application
+class App {
+  id: UInt32
+  name: String
+  vnd: String
+  vnd_id: UInt32
+  cmds: Listing<Command>
+}
+
+// Command bit flags
+class CmdBitFlags {
+  R: UInt8 = 128 // Request
+  P: UInt8 = 64 // Proxy
+  E: UInt8 = 32 // Error
+  T: UInt8 = 16 // ReTransmition
+}
+
+// Application command
+class Command {
+  code: UInt32
+  name: String
+  short: String
+  flags: UInt8 = 0
+  request: Listing<AvpRule>
+  answer: Listing<AvpRule>
+
+  hidden const R:UInt8 = new CmdBitFlags{}.R
+  hidden const P:UInt8 = new CmdBitFlags{}.P
+  hidden const E:UInt8 = new CmdBitFlags{}.E
+  hidden const T:UInt8 = new CmdBitFlags{}.T
+}
+
+// Application AVP rule
+class AvpRule {
+  name: String
+  required: Boolean
+  max: Int?
+}
+
+// AVP bit flags
+class AvpBitFlags {
+  V: UInt8 = 128 // Vendor specific
+  M: UInt8 = 64 // Mandatory
+  P: UInt8 = 32 // Protected
+}
+
+// AVP data types
+class AvpDataTypes {
+  OctetString: Int = 1
+  Integer32: Int = 2
+  Integer64: Int = 3
+  Unsigned32: Int = 4
+  Unsigned64: Int = 5
+  Float32: Int = 6
+  Float64: Int = 7
+  Address: Int = 8
+  Time: Int = 9
+  UTF8String: Int = 10
+  Identity: Int = 11
+  URI: Int = 12
+  IPFilterRule: Int = 13
+  QoSFilterRule: Int = 14
+  Enumerated: Int = 15
+  Grouped: Int = 16
+}
+
+// AVP
+class Avp {
+  code: UInt32
+  name: String
+  flags: UInt8 = 0
+  vnd_id: UInt32 = 0
+  type: Int
+  enum: Enum?
+  group: Group?
+
+  hidden const V: UInt8 = new AvpBitFlags{}.V
+  hidden const M: UInt8 = new AvpBitFlags{}.M
+  hidden const P: UInt8 = new AvpBitFlags{}.P
+
+  hidden const OctetString: Int = new AvpDataTypes{}.OctetString
+  hidden const Integer32: Int = new AvpDataTypes{}.Integer32
+  hidden const Integer64: Int = new AvpDataTypes{}.Integer64
+  hidden const Unsigned32: Int = new AvpDataTypes{}.Unsigned32
+  hidden const Unsigned64: Int = new AvpDataTypes{}.Unsigned64
+  hidden const Float32: Int = new AvpDataTypes{}.Float32
+  hidden const Float64: Int = new AvpDataTypes{}.Float64
+  hidden const Address: Int = new AvpDataTypes{}.Address
+  hidden const Time: Int = new AvpDataTypes{}.Time
+  hidden const UTF8String: Int = new AvpDataTypes{}.UTF8String
+  hidden const Identity: Int = new AvpDataTypes{}.Identity
+  hidden const URI: Int = new AvpDataTypes{}.URI
+  hidden const IPFilterRule: Int = new AvpDataTypes{}.IPFilterRule
+  hidden const QoSFilterRule: Int = new AvpDataTypes{}.QoSFilterRule
+  hidden const Enumerated: Int = new AvpDataTypes{}.Enumerated
+  hidden const Grouped: Int = new AvpDataTypes{}.Grouped
+}
+
+// AVP enum
+class Enum {
+  items: Listing<Item>
+}
+
+// AVP enum item
+class Item {
+  code: Int32
+  name: String
+}
+
+// AVP group
+class Group {
+  members: Listing<AvpRule>
+}

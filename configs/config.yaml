@@ -1,0 +1,9 @@
+tgdp:
+  avpDataFile: avp-data.yaml
+  peersFile: peers.yaml
+  batchPath: batch
+  batchYaml: yaml
+
+diameter:
+  # Transaction or Session
+  mode: Transaction

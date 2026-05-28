@@ -1,0 +1,28 @@
+APN-Configuration-Profile:
+  Context-Identifier: 1
+  All-APN-Configurations-Included-Indicator: 0
+  APN-Configuration:
+    - Context-Identifier: 1
+      PDN-Type: 0
+      Service-Selection: internet
+      EPS-Subscribed-QoS-Profile:
+        QoS-Class-Identifier: 8
+        Allocation-Retention-Priority:
+          Priority-Level: 1
+          Pre-emption-Vulnerability: 1
+      VPLMN-Dynamic-Address-Allowed: 0
+      PDN-GW-Allocation-Type: 1
+      AMBR:
+        Max-Requested-Bandwidth-UL: 50000000
+        Max-Requested-Bandwidth-DL: 150000000
+    - Context-Identifier: 3
+      PDN-Type: 0
+      Service-Selection: ims
+      EPS-Subscribed-QoS-Profile:
+        QoS-Class-Identifier: 5
+        Allocation-Retention-Priority:
+          Priority-Level: 1
+          Pre-emption-Vulnerability: 1
+      AMBR:
+        Max-Requested-Bandwidth-UL: 50000000
+        Max-Requested-Bandwidth-DL: 150000000
