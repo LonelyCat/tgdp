@@ -13,79 +13,148 @@ package config
 import (
 	"os"
 	"path/filepath"
-	"tgdp/internal/flags"
+	"strings"
+	"tgdp/pkg/diameter"
+
+	"gopkg.in/yaml.v3"
 )
 
-// Constants
+// Consts
 //
 
+// Default directories names
 const (
-	dataDir         = ".tgdp"
-	replBatchDir    = "batch"
-	replYamlDir     = "yaml"
-	replAutoRunFile = "autorun"
-	replHistoryFile = "history"
+	userDir     = ".tgdp"
+	pklSubdir   = "pkl"
+	batchSubdir = "batch"
+	yamlSubdir  = "yaml"
 )
 
+// Default files names
 const (
-	confFile    = "config.yaml"
-	avpDataFile = "data/avp-data.yaml"
-	peersFile   = "data/peers.yaml"
-	diaPklFile  = "pkl/dictionary.pkl"
+	confFile     = "config.yaml"
+	avpsDataFile = "avps.yaml"
+	peersFile    = "peers.yaml"
+	pklDictFile  = "dictionary.pkl"
+	replAutoRun  = "autorun"
+	replHistory  = "history"
 )
 
-const (
-	SessionIdAuto   = 0
-	SessionIdManual = 1
-)
+// Types
+//
+
+type Config struct {
+	// Diameter protocol parameters
+	DiaDictFile string `yaml:"dictionary_file"`
+	DiaMode     string `yaml:"diameter_mode"`
+	DiaModeId   int32
+
+	// Data files
+	AvpsDataFile  string `yaml:"avps_data_file"`
+	PeersDataFile string `yaml:"peers_data_file"`
+
+	// Subdirectories
+	BatchSubdir string `yaml:"batch_subdir"`
+	YamlSubdir  string `yaml:"yaml_subdir"`
+}
+
+// Variables
+//
 
 var (
-	SessionIdMode = SessionIdAuto
+	// User data directory - default is ~/.tgdp
+	dataDir = filepath.Join(os.Getenv("HOME"), userDir)
+	// Config instance
+	config Config
 )
 
 // Functions
 //
 
-func DataDir() string {
-	if len(*flags.C) > 0 {
-		return *flags.C
+func Load(dir string) error {
+	SetDataDir(dir)
 
+	var failed bool
+	defer func() {
+		if failed {
+			config.DiaModeId = diameter.ModeTransaction
+			config.DiaDictFile = DialDictFile()
+			config.AvpsDataFile = AvpsDataFile()
+			config.PeersDataFile = PeersDataFile()
+			config.BatchSubdir = BatchDir()
+			config.YamlSubdir = YamlDir()
+		}
+	}()
+
+	yamlFile, err := os.ReadFile(ConfigFile())
+	if err != nil {
+		failed = true
+		return err
 	}
-	return filepath.Join(os.Getenv("HOME"), dataDir)
+
+	err = yaml.Unmarshal([]byte(yamlFile), &config)
+	if err != nil {
+		return err
+	}
+
+	switch strings.ToLower(config.DiaMode) {
+	case "transaction":
+		config.DiaModeId = diameter.ModeTransaction
+	case "session":
+		config.DiaModeId = diameter.ModeSession
+	default:
+		config.DiaModeId = diameter.ModeUnknown
+	}
+
+	return nil
 }
 
-func BatchDir() string {
-	return filepath.Join(DataDir(), replBatchDir)
+func SetDataDir(dir string) {
+	if len(dir) > 0 {
+		dataDir = dir
+	}
 }
 
-func YamlDir() string {
-	return filepath.Join(DataDir(), replYamlDir)
-}
-
-func getConfigPath(fileName string) string {
-	return filepath.Join(DataDir(), fileName)
+func DataDir() string {
+	return dataDir
 }
 
 func ConfigFile() string {
 	return getConfigPath(confFile)
 }
 
-func DiaDictFile() string {
-	return getConfigPath(diaPklFile)
+func DiaMode() int32 {
+	return config.DiaModeId
 }
 
-func AvpDataFile() string {
-	return getConfigPath(avpDataFile)
+func DialDictFile() string {
+	return getConfigPath(config.DiaDictFile)
 }
 
-func PeersFile() string {
-	return getConfigPath(peersFile)
+func AvpsDataFile() string {
+	return getConfigPath(config.AvpsDataFile)
+}
+
+func PeersDataFile() string {
+	return getConfigPath(config.PeersDataFile)
+}
+
+func BatchDir() string {
+	return getConfigPath(config.BatchSubdir)
+}
+
+func YamlDir() string {
+	return getConfigPath(config.YamlSubdir)
 }
 
 func AutoRunFile() string {
-	return getConfigPath(replAutoRunFile)
+	return getConfigPath(replAutoRun)
 }
 
 func HistoryFile() string {
-	return getConfigPath(replHistoryFile)
+	return getConfigPath(replHistory)
+}
+
+func getConfigPath(file string) string {
+	return filepath.Join(DataDir(), file)
 }

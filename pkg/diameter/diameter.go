@@ -34,9 +34,6 @@ import (
 // Consts
 //
 
-// Context key for Diameter environment
-type EnvContextKey string
-
 const (
 	EnvContext EnvContextKey = "diameter-env"
 )
@@ -46,23 +43,10 @@ const (
 	mask32bits = 0xFFFFFFFF
 )
 
-var (
-	avpPool = sync.Pool{
-		New: func() any {
-			return &Avp{}
-		},
-	}
-
-	messagePool = sync.Pool{
-		New: func() any {
-			return &Message{}
-		},
-	}
-)
-
 // Mode constants define the Diameter operating mode
 const (
-	ModeTransaction = int32(iota)
+	ModeUnknown = int32(iota)
+	ModeTransaction
 	ModeSession
 )
 
@@ -105,6 +89,9 @@ type Diameter struct {
 	rng     *rand.Rand
 }
 
+// Context key for Diameter environment
+type EnvContextKey string
+
 // diaTypesToGo maps Diameter data types to Go types for serialization/deserialization
 type diaTypesToGo map[int]avpGoType
 
@@ -118,6 +105,23 @@ type avpGoType struct {
 type ITrace interface {
 	Trace(shift ...int)
 }
+
+// Variables
+//
+
+var (
+	avpPool = sync.Pool{
+		New: func() any {
+			return &Avp{}
+		},
+	}
+
+	messagePool = sync.Pool{
+		New: func() any {
+			return &Message{}
+		},
+	}
+)
 
 // Constructor
 //

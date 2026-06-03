@@ -146,11 +146,13 @@ func (store *AvpStore) Delete(id uint32, index int) bool {
 }
 
 // Purge removes all AVPs for the given code from the store.
-func (store *AvpStore) Purge(id uint32) {
+func (store *AvpStore) Purge() {
 	store.mu.Lock()
 	defer store.mu.Unlock()
 
-	delete(store.data, id)
+	for id, _ := range store.data {
+		delete(store.data, id)
+	}
 }
 
 // Range iterates over all AVP code/value pairs in the store.

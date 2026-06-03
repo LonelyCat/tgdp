@@ -33,24 +33,25 @@ First, ensure you have:
 ```sh
 mkdir -p ~/.tgdp
 ```
-3. Copy the `configs` directory provided with TGDP into the newly created `~/.tgdp` folder. Your final structure should look like this:
+3. Copy the contents of the `configs` directory provided with TGDP into the newly created `~/.tgdp` folder. To match the default `config.yaml`, place the data files in a `data` subdirectory. Your final structure should look like this:
 ```
 ~/.tgdp/
-└── configs/
-├── avp-data.yaml
-├── peers.yaml
+├── config.yaml
+├── data/
+│   ├── avps.yaml
+│   └── peers.yaml
 └── pkl/
-└── ...
+    └── dictionary.pkl
 ```
 
 ### 2. Configure a Peer
 
-Define the remote Diameter server you want to communicate with in `~/.tgdp/configs/peers.yaml`.
+Define the remote Diameter peers you want to communicate with in `~/.tgdp/data/peers.yaml`.
 
-For example, to define a peer named `hss-test`:
+For example, to define a peer naamed `hss-test`:
 
 ```yaml
-# ~/.tgdp/configs/peers.yaml
+# ~/.tgdp/data/peers.yaml
 hss-test:
   address: 192.168.1.100
   port: 3868
@@ -59,10 +60,10 @@ hss-test:
 
 ### 3. Configure AVP Data
 
-Define the data for the AVPs that will be included in your message in `~/.tgdp/configs/avp-data.yaml`.
+Define the data for the AVPs that will be included in your message in `~/.tgdp/data/avps.yaml`.
 
 ```yaml
-# ~/.tgdp/configs/avp-data.yaml
+# ~/.tgdp/data/avps.yaml
 Origin-Host: "client.example.org"
 Origin-Realm: "example.org"
 Destination-Realm: "test.net"
@@ -118,12 +119,26 @@ make release
 
 ## Configuration
 
-TGDP uses two primary YAML files for configuration, located by default in `~/.tgdp/configs`.
+TGDP uses a central `config.yaml` file for configuration, located by default in `~/.tgdp/config.yaml`.
 You can specify a different configuration directory using the `-c <path>` flag.
+
+### Main Configuration (`config.yaml`)
+
+This file defines the paths to other data files and general operating modes.
+
+**Schema:**
+```yaml
+avps_data_file: "data/avps.yaml"    # Path to the global AVPs data file
+peers_data_file: "data/peers.yaml" # Path to the peers data file
+batch_subdir: "batch"              # Subdirectory for REPL mode batch files
+yaml_subdir: "yaml"                # Subdirectory for REPL mode YAML files
+diameter_mode: "transaction"       # Diameter mode - "transaction" or "session"
+dictionary_file: "pkl/dictionary.pkl" # Path to the PKL Diameter dictionary data file
+```
 
 ### Peers (`peers.yaml`)
 
-This file defines the remote Diameter peers (servers) TGDP can connect to.
+This file defines the remote Diameter peers (servers) TGDP can connect to. It is located at the path specified by `peers_data_file` in `config.yaml`.
 
 **Schema:**
 ```yaml
@@ -150,9 +165,9 @@ pcrf:
   protocol: tcp
 ```
 
-### AVP Data (`avp-data.yaml`)
+### AVP Data (`avps.yaml`)
 
-This file provides the values for the AVPs used to construct Diameter messages.
+This file provides the values for the AVPs used to construct Diameter messages. It is located at the path specified by `avps_data_file` in `config.yaml`.
 
 **Format:**
 ```yaml
@@ -194,7 +209,7 @@ Auth-Application-Id:
 
 ## Message Creation Rules
 
-TGDP constructs Diameter messages based on the command definition in the Pkl files and the AVP data provided in `avp-data.yaml`
+TGDP constructs Diameter messages based on the command definition in the Pkl files and the AVP data provided in `avps.yaml`
 (or loaded dynamically in REPL mode). The logic is as follows:
 **Mandatory AVPs**: If an AVP is defined as mandatory for a specific command, its value **must** be present in the AVP data.
 If it is missing, TGDP will report an error and fail to create the message.
@@ -203,7 +218,7 @@ If an optional AVP **has a value** defined in the AVP data, it will be **include
 If an optional AVP **does not have a value** defined, it will be **omitted** from the message.
 **Multiple Values**: If an AVP is configured with multiple values (using a YAML array), the AVP will be included in the message multiple time.
 
-This system allows you to maintain a single `avp-data.yaml` file with all necessary AVPs and trust that TGDP will correctly build the message
+This system allows you to maintain a single `avps.yaml` file with all necessary AVPs and trust that TGDP will correctly build the message
 with only the required and specified optional AVPs for any given command.
 
 ---
@@ -267,7 +282,7 @@ TGDP can act as a simple Diameter server.
 
 **From CLI:**
 
-In this mode TGDP automatically replying to requests based on the data in `avp-data.yaml`.
+In this mode TGDP automatically replying to requests based on the data in `avps.yaml`.
 ```sh
 # Listen on localhost:3868 for both SCTP and TCP
 tgdp -s localhost:3868
@@ -442,7 +457,7 @@ D> server stop
 
 ### Command `avp`
 Manages AVP data in memory for the current session.
-This is useful for dynamically changing AVP values without editing the `avp-data.yaml` file.
+This is useful for dynamically changing AVP values without editing the `avps.yaml` file.
 
 **Sub-commands:**
 * `list`: Show AVPs with values.
@@ -483,7 +498,7 @@ D> avp delete Auth-Application-Id 2
 **Notes**:
 * for `info` asterisks '*' mark required members.
 * if index is not specified for `delete`, all values is deleted.
-* the YAML content should be similar to `avp-data.yaml`.
+* the YAML content should be similar to `avps.yaml`.
 * by default TGDP looks up file in `~/.tgdp/yaml` directory.
 
 ### Command `pcap`

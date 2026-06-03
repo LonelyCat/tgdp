@@ -254,10 +254,7 @@ func load(cmd *cobra.Command, args []string) {
 
 func purge(cmd *cobra.Command, args []string) {
 	env := cmd.Context().Value(diameter.EnvContext).(*diameter.Diameter)
-
-	for id, _ := range env.Store().Iter2() {
-		env.Store().Purge(id)
-	}
+	env.Store().Purge()
 }
 
 // Helpers

@@ -60,7 +60,12 @@ func main() {
 		version.Show()
 	}
 
-	d, err := diameter.New(diameter.ModeTransaction)
+	if err := config.Load(*flags.C); err != nil {
+		fmt.Println(err)
+		fmt.Println("Default settings applied")
+	}
+
+	d, err := diameter.New(config.DiaMode())
 	exitOnError(err)
 
 	if *flags.W != "" {
@@ -68,7 +73,7 @@ func main() {
 		exitOnError(d.PcapOpen(*flags.W, *flags.A))
 	}
 
-	exitOnError(d.LoadDict(config.DiaDictFile(), dict.FormatPkl))
+	exitOnError(d.LoadDict(config.DialDictFile(), dict.FormatPkl))
 
 	if *flags.D {
 		d.Dict().Show()
@@ -83,8 +88,8 @@ func main() {
 		}
 	}
 
-	exitOnError(d.LoadData(config.AvpDataFile()))
-	exitOnError(d.LoadPeers(config.PeersFile()))
+	exitOnError(d.LoadData(config.AvpsDataFile()))
+	exitOnError(d.LoadPeers(config.PeersDataFile()))
 
 	d.SetTraceLevel(int32(*flags.V))
 

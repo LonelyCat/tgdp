@@ -92,11 +92,6 @@ func CompList() []readline.PrefixCompleterInterface {
 }
 
 func start(cmd *cobra.Command, args []string) {
-	if len(args) < 1 {
-		fmt.Println(cmd.Short)
-		return
-	}
-
 	if server != nil && server.IsRunning() {
 		fmt.Println("Server is already running")
 		server.Dump()
@@ -104,10 +99,13 @@ func start(cmd *cobra.Command, args []string) {
 	}
 
 	listenAddr := func() string {
-		if len(args) > 1 {
-			return fmt.Sprintf("%s:%s", args[0], args[1])
-		} else {
+		switch len(args) {
+		case 0:
+			return fmt.Sprintf(":%d", transport.DefaultPort)
+		case 1:
 			return fmt.Sprintf("%s:%d", args[0], transport.DefaultPort)
+		default:
+			return fmt.Sprintf("%s:%s", args[0], args[1])
 		}
 	}
 

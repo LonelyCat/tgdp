@@ -1,9 +1,20 @@
-tgdp:
-  avpDataFile: avp-data.yaml
-  peersFile: peers.yaml
-  batchPath: batch
-  batchYaml: yaml
+# TGDP configuration
+#
+# Default configuration base directory is "~/.tgdp"
+#
+# Global AVPs data file
+avps_data_file: "data/avps.yaml"
+# Peers data file
+peers_data_file: "data/peers.yaml"
 
-diameter:
-  # Transaction or Session
-  mode: Transaction
+# REPL mode batch files subdirectory
+batch_subdir: "batch"
+# REPL mode YAML files (individual AVP data) subdirectory
+yaml_subdir: "yaml"
+
+# Diameter mode - Transaction or Session
+diameter_mode: "transaction"
+# PKL Diameter dictionary data file
+dictionary_file: "pkl/dictionary.pkl"
+# PKL Diameter dictionary data file - pkl | json | yaml
+dictionary_format: "pkl"
