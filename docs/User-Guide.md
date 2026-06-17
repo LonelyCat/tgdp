@@ -1,5 +1,38 @@
-
 # TGDP User Guide
+
+## Table of contents
+
+- [Introduction](#introduction)
+- [Quick Start](#quick-start)
+  - [1. Installation](#1-installation)
+  - [2. Configure a Peer](#2-configure-a-peer)
+  - [3. Configure AVP Data](#3-configure-avp-data)
+  - [4. Send a Message](#4-send-a-message)
+- [Installation](#installation)
+  - [Building from Source](#building-from-source)
+- [Configuration](#configuration)
+  - [Main Configuration (`config.yaml`)](#main-configuration-configyaml)
+  - [Peers (`peers.yaml`)](#peers-peersyaml)
+  - [AVP Data (`avps.yaml`)](#avp-data-avpsyaml)
+- [Message Creation Rules](#message-creation-rules)
+- [Operating Modes](#operating-modes)
+  - [1. CLI Mode](#1-cli-mode)
+  - [2. REPL Mode](#2-repl-mode)
+  - [3. Server Mode](#3-server-mode)
+  - [4. Lua Scripting](#4-lua-scripting)
+- [REPL Command Reference](#repl-command-reference)
+  - [Command `help`](#command-help)
+  - [Command `quit`](#command-quit)
+  - [Command `batch`](#command-batch)
+  - [Command `echo`](#command-echo)
+  - [Command `peer`](#command-peer)
+  - [Command `send`](#command-send)
+  - [Command `receive`](#command-receive)
+  - [Command `run`](#command-run)
+  - [Command `server`](#command-server)
+  - [Command `avp`](#command-avp)
+  - [Command `pcap`](#command-pcap)
+  - [Command `verbose`](#command-verbose)
 
 ## Introduction
 
@@ -24,8 +57,8 @@ This section will guide you through installing TGDP, configuring a remote peer, 
 
 First, ensure you have:
 * `tgdp` executable
-* `configs` directory
 * `pkl` compiler executable
+* `configs` directory
 * `libpcap.so` installed
 
 1. Copy the `tgdp` and `pkl` executable to a directory in your system's `PATH` (e.g., `/usr/local/bin` or `~/.local/bin`).
@@ -41,7 +74,10 @@ mkdir -p ~/.tgdp
 │   ├── avps.yaml
 │   └── peers.yaml
 └── pkl/
+    └── Diameter.pkl
     └── dictionary.pkl
+    └── apps.pkl
+    └── avps.pkl
 ```
 
 ### 2. Configure a Peer
@@ -69,8 +105,8 @@ Origin-Realm: "example.org"
 Destination-Realm: "test.net"
 User-Name: "1234567890"
 Vendor-Specific-Application-Id:
-  Vendor-Id:	        10415
-  Auth-Application-Id:	16777251
+  Vendor-Id:            10415
+  Auth-Application-Id:  16777251
 ```
 
 ### 4. Send a Message
@@ -79,7 +115,7 @@ Now, you can send a message from the command line.
 This example sends an **Update-Location-Request (ULR)** for the **S6a** application to the `hss-test` peer.
 
 ```sh
-tgdp hss s6a ul
+tgdp hss-test s6a ul
 ```
 
 TGDP will construct the message, send it to the configured peer, and print the response.
@@ -106,14 +142,14 @@ TGDP is distributed as a pre-compiled binary. For manual installation:
 **Steps:**
 1. **Install Go:** [go.dev](https://go.dev)
 2. **Install Pkl:** [pkl-lang.org](https://pkl-lang.org/main/current/pkl-cli/)
-3. **Install Dependencies:** Use your system's package manager to install `make` and the PCAP library.
+3. **Install Dependencies:** Use your system's package manager to install `make` and the `PCAP library`.
 4. **Build:**
 ```sh
 git clone https://github.com/LonelyCat/tgdp/tgdp.git
 cd tgdp
-make release
+make [release]
 ```
-5. Copy the resulting `tgdp` binary to your `PATH`.
+5. Copy/move the resulting `tgdp` binary to your `PATH`.
 
 ---
 
@@ -177,10 +213,11 @@ This file provides the values for the AVPs used to construct Diameter messages. 
 **Rules:**
 * AVP names are case-insensitive.
 * Use quotes for string values, especially if they consist only of numbers.
+* For `ENUMERATED` AVPs value can be defined by code or mnemonic name.
 * For `GROUPED` AVPs, list member AVPs indented below the group name.
 * To specify multiple values for an AVP, use a YAML array.
 
-**Example:**
+**Examples:**
 ```yaml
 # String types
 Origin-Host: tgdp.client.net
@@ -189,7 +226,7 @@ User-Name: "123450123456789"
 # Integer type
 Vendor-Id: 10415
 
-# Enumerated type (can use name or integer value)
+# Enumerated type (can use mnemonic name or code (integer value))
 Cancellation-Type: SUBSCRIPTION_WITHDRAWAL
 # SUBSCRIPTION_WITHDRAWAL is equivalent to 2
 # Cancellation-Type: 2
@@ -211,12 +248,16 @@ Auth-Application-Id:
 
 TGDP constructs Diameter messages based on the command definition in the Pkl files and the AVP data provided in `avps.yaml`
 (or loaded dynamically in REPL mode). The logic is as follows:
-**Mandatory AVPs**: If an AVP is defined as mandatory for a specific command, its value **must** be present in the AVP data.
-If it is missing, TGDP will report an error and fail to create the message.
+
+**Mandatory AVPs**: 
+* If an AVP is defined as mandatory for a specific command, its value **must** be present in the AVP data.
+* If it is missing, TGDP will report an error and fail to create the message.
+
 **Optional AVPs**:
-If an optional AVP **has a value** defined in the AVP data, it will be **included** in the message.
-If an optional AVP **does not have a value** defined, it will be **omitted** from the message.
-**Multiple Values**: If an AVP is configured with multiple values (using a YAML array), the AVP will be included in the message multiple time.
+* If an optional AVP **has a value** defined in the AVP data, it will be **included** in the message.
+* If an optional AVP **does not have a value** defined, it will be **omitted** from the message.
+
+**Multiple Values**: If an AVP is configured with multiple values (using a YAML array), the AVP will be included in the message multiple times.
 
 This system allows you to maintain a single `avps.yaml` file with all necessary AVPs and trust that TGDP will correctly build the message
 with only the required and specified optional AVPs for any given command.
@@ -247,7 +288,7 @@ tgdp [flags] <peer> <app> <command> [<command> ...]
 * `-w <file.pcap>`: Write the exchange to a PCAP file
 * `-y`: Validate the Diameter dictionary (Pkl files) and exit
 
-**Example:**
+**Examples:**
 ```sh
 # Send an S6a Update-Location-Request (ULR) to the 'hss1' peer
 tgdp hss1 s6a ul
@@ -332,20 +373,20 @@ D> run scripts/demo.lua IMSI 123450123456789
 
 This section provides a detailed reference for all commands available in TGDP's interactive REPL mode.
 
- |  Command | Synonyms | Description  | 
- | -- | -- | -- | 
- |  help  | ?     | Help output  | 
- |  quit | exit bye | Exiting TGDP  | 
- |  batch | bat | Executing a command from a file  | 
- |  echo |  |  Sending text to print  | 
- |  peer |  |  Manage remote peers  | 
- |  send |  |  Send a message to a peer  | 
- |  receive | recv | Receive a message from a peer  | 
- |  avp   |  |  Setting up and retrieving AVP data  | 
- |  server |  |  Run a local server  | 
- |  run |  |  Execute a Lua script  | 
- |  pcap |  |  Save messages to a PCAP file  | 
- |  verbose       |  |  Setting the output verbosity level  | 
+ |  Command | Synonyms | Description  |
+ | -- | -- | -- |
+ |  help  | ?     | Help output  |
+ |  quit | exit bye | Exiting TGDP  |
+ |  batch | bat | Executing a command from a file  |
+ |  echo |  |  Sending text to print  |
+ |  peer |  |  Manage remote peers  |
+ |  send |  |  Send a message to a peer  |
+ |  receive | recv | Receive a message from a peer  |
+ |  avp   |  |  Setting up and retrieving AVP data  |
+ |  server |  |  Run a local server  |
+ |  run |  |  Execute a Lua script  |
+ |  pcap |  |  Save messages to a PCAP file  |
+ |  verbose       |  |  Setting the output verbosity level  |
 
 **Note**: Use the TAB key to complete commands and [possible] parameters.
 

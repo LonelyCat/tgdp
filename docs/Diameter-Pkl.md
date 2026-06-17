@@ -1,5 +1,10 @@
 # Diameter Definition in Pkl
 
+## Table of contents
+
+- [Applications definitions - apps.pkl](#applications-definitions-appspkl)
+- [AVPs definitions - avps.pkl](#avps-definitions-avpspkl)
+
 **Note**: Knowledge of Apple's Pkl configuration description language is required.
 Visit [www.pkl-lang.org](http://www.pkl-lang.org) for more details.
 
