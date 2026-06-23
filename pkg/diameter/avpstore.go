@@ -150,7 +150,7 @@ func (store *AvpStore) Purge() {
 	store.mu.Lock()
 	defer store.mu.Unlock()
 
-	for id, _ := range store.data {
+	for id := range store.data {
 		delete(store.data, id)
 	}
 }

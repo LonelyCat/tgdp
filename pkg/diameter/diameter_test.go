@@ -123,31 +123,31 @@ func TestNode(t *testing.T) {
 	fmt.Println("Peer connected successfully")
 	peer.Trace()
 
-	req, err := dia.NewRequest("S6a", "UL")
+	msg, err := dia.NewRequest("S6a", "UL")
 	if err != nil {
 		t.Fatal(err)
 		return
 	}
-	req.Trace()
+	msg.Trace()
 
-	_, err = req.Serialize()
-	if err != nil {
-		t.Fatal(err)
-		return
-	}
-
-	err = peer.SendTo(req.Bytes())
+	_, err = msg.Serialize()
 	if err != nil {
 		t.Fatal(err)
 		return
 	}
 
-	if ans, err := dia.RecvMessage(peer, true); err != nil {
+	err = peer.SendTo(msg.Bytes())
+	if err != nil {
 		t.Fatal(err)
 		return
-	} else {
-		ans.Trace()
 	}
+
+	msg, err = dia.RecvMessage(peer, true)
+	if err != nil {
+		t.Fatal(err)
+		return
+	}
+	msg.Trace()
 
 	err = peer.Disconnect()
 	if err != nil {

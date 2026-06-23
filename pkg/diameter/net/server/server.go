@@ -14,7 +14,6 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
-	"net"
 	"sync"
 	"sync/atomic"
 
@@ -22,8 +21,6 @@ import (
 	"tgdp/pkg/diameter/diwe"
 	"tgdp/pkg/diameter/net/node"
 	"tgdp/pkg/diameter/net/transport"
-
-	sctp "github.com/georgeyanev/go-sctp"
 )
 
 // Consts
@@ -80,19 +77,6 @@ type WorkerPool struct {
 	maxWorkers int
 	workers    chan struct{}
 	wg         sync.WaitGroup
-	mu         sync.Mutex
-}
-
-// sctpListener wraps an SCTP network listener.
-type sctpListener struct {
-	uri      string
-	listener *sctp.SCTPListener
-}
-
-// tcpListener wraps a TCP network listener.
-type tcpListener struct {
-	uri      string
-	listener *net.TCPListener
 }
 
 // Methods
@@ -106,9 +90,11 @@ func (wp *WorkerPool) Execute(task func()) bool {
 	case wp.workers <- struct{}{}:
 		wp.wg.Add(1)
 		go func() {
+			defer func() {
+				<-wp.workers
+				wp.wg.Done()
+			}()
 			task()
-			<-wp.workers
-			wp.wg.Done()
 		}()
 		return true
 	default:

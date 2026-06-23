@@ -170,10 +170,15 @@ func (m *Message) Response() (*Message, error) {
 	}
 
 	// Copy Session-Id from request to answer if present
-	if avpSessionId, err := m.GetAvp("Session-Id"); err == nil {
+	avpSessionId, err := m.GetAvp("Session-Id")
+	if err == nil {
 		value := avpSessionId.Value().(string)
-		if avpSessionId, err := r.GetAvp("Session-Id"); err == nil {
-			if err = avpSessionId.SetValue(value); err != nil {
+
+		// Reuse the outer 'err' and 'avpSessionId' variables using '=' instead of ':='
+		avpSessionId, err = r.GetAvp("Session-Id")
+		if err == nil {
+			err = avpSessionId.SetValue(value)
+			if err != nil {
 				return nil, err
 			}
 		}
@@ -185,7 +190,8 @@ func (m *Message) Response() (*Message, error) {
 	// Clear the Request flag to convert request to answer
 	r.Flags = m.Flags & ^m.env.Dict().CmdFlag().R
 
-	return r, err
+	// Explicitly return nil for error to avoid returning a stale 'err' state
+	return r, nil
 }
 
 // Serialize converts the message to its wire format bytes.

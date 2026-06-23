@@ -207,16 +207,10 @@ func del(cmd *cobra.Command, args []string) {
 
 	env := cmd.Context().Value(diameter.EnvContext).(*diameter.Diameter)
 
-	avpCode, err := strconv.Atoi(args[0])
+	avp, err := env.Dict().GetAvp(args[0])
 	if err != nil {
-
-		if avp, err := env.Dict().GetAvp(args[0]); err != nil {
-			fmt.Println(err)
-			return
-		} else {
-			avpCode = int(avp.Code)
-		}
-
+		fmt.Println(err)
+		return
 	}
 
 	index, err := strconv.Atoi(args[1])
@@ -225,8 +219,8 @@ func del(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	if ok := env.Store().Delete(uint32(avpCode), index); !ok {
-		fmt.Printf("Delete failed: avp %d not found or wrong index %d\n", avpCode, index)
+	if ok := env.Store().Delete(uint32(avp.Code), index); !ok {
+		fmt.Printf("Delete failed: avp %d not found or wrong index %d\n", avp.Code, index)
 	}
 
 	getAvpValues(env, args[0], 0)

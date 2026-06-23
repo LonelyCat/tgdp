@@ -52,12 +52,14 @@ func Send(env *diameter.Diameter, args []string, request, recv bool, disconnect 
 		}
 		env.Trace(msg, diameter.TraceMsg)
 
-		if _, err := msg.Serialize(); err != nil {
+		_, err = msg.Serialize()
+		if err != nil {
 			slog.Error(err.Error())
 			break
 		}
 
-		if err := env.Pcap().Write(msg.Bytes(), peer, pcap.DirOutgoing); err != nil {
+		err = env.Pcap().Write(msg.Bytes(), peer, pcap.DirOutgoing)
+		if err != nil {
 			slog.Error(err.Error())
 		}
 		env.Pcap().Append(pcap.Append)
